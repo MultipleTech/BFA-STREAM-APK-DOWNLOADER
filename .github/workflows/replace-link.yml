@@ -1,0 +1,38 @@
+name: Replace Project Links
+
+on:
+  push:
+    branches:
+      - main # သို့မဟုတ် မိမိသုံးနေတဲ့ branch နာမည် (ဥပမာ- master)
+  workflow_dispatch: # GitHub Web ပေါ်ကနေ လက်နဲ့ နှိပ်ပြီး run ချင်ရင်လည်း ရအောင် လုပ်ထားတာပါ
+
+jobs:
+  replace-links:
+    runs-on: ubuntu-latest
+
+    steps:
+      # ၁။ Project code တွေကို GitHub Runner ထဲ ဆွဲသွင်းခြင်း
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # ၂။ File အားလုံးထဲက လင့်ခ်အဟောင်းကို အသစ်နဲ့ လိုက်အစားထိုးခြင်း
+      - name: Find and Replace URLs
+        run: |
+          echo "Replacing old URL with new URL in all files..."
+          # .git folder ထဲက file တွေ မပါအောင် ဖယ်ပြီး ကျန်တဲ့ file အားလုံးကို လိုက်ပြောင်းပါတယ်
+          find . -type f -not -path '*/.*' -exec sed -i 's|https://download-link-zeta.vercel.app/|https://bfa-stream-apk-downloader.vercel.app/|g' {} +
+
+      # ၃။ ပြောင်းလဲသွားတဲ့ file တွေကို GitHub ထဲ ပြန်ပြီး Commit နဲ့ Push လုပ်ခြင်း
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          # ပြောင်းလဲမှု ရှိမရှိ စစ်ဆေးပြီး ရှိမှ commit လုပ်မယ်
+          if [ -n "$(git status --porcelain)" ]; then
+            git add .
+            git commit -m "chore: update project deployment links automatically"
+            git push
+          else
+            echo "No changes detected. URLs are already updated."
+          fi
