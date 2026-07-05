@@ -1,191 +1,558 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>S4ITMM TV – Slideshow</title>
-  <body>
-  <div class="slideshow-container">
-    <div class="slide fade">
-      <img src="https://s4-itmm-tv-kohl.vercel.app/SplashLogo.jpg" alt="Promo Graphic" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>BFA STREAM Download</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #080c14;
+            --glass: rgba(255, 255, 255, 0.03);
+            --accent-tv: #00f2fe; /* Cyber Blue for TV */
+            --accent-phone: #ec4899; /* Hot Pink for Phone */
+            --text-muted: #94a3b8;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        body {
+            background: radial-gradient(circle at 50% 0%, #1e293b 0%, var(--bg-dark) 100%);
+            color: #ffffff;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* Branding Card */
+        .brand-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .logo-ring {
+            display: inline-flex;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent-tv), var(--accent-phone));
+            border-radius: 24px;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
+            margin-bottom: 15px;
+        }
+
+        .brand-name {
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            margin: 0;
+            background: linear-gradient(to right, #fff, var(--accent-tv));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Flashing Warning Box */
+        .warning-flash {
+            background: rgba(239, 68, 68, 0.1);
+            border: 3px solid var(--danger);
+            border-radius: 18px;
+            padding: 16px 12px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            line-height: 1.4;
+            animation: flashBorder 1.5s infinite;
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.3);
+        }
+
+        @keyframes flashBorder {
+            0%, 100% { 
+                border-color: var(--danger);
+                box-shadow: 0 0 25px rgba(239, 68, 68, 0.4);
+            }
+            33% { 
+                border-color: var(--warning);
+                box-shadow: 0 0 25px rgba(245, 158, 11, 0.4);
+            }
+            66% { 
+                border-color: var(--accent-tv);
+                box-shadow: 0 0 25px rgba(0, 242, 254, 0.4);
+            }
+        }
+
+        /* Visual Image Selector Cards */
+        .visual-selectors {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .img-card-btn {
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            padding: 0;
+            width: 100%;
+            display: block;
+        }
+
+        .img-card-btn img {
+            width: 100%;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .img-card-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+        }
+
+        /* Active Glow Effects */
+        .img-card-btn.active-tv {
+            border-color: var(--accent-tv);
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.3);
+        }
+
+        .img-card-btn.active-phone {
+            border-color: var(--accent-phone);
+            box-shadow: 0 0 25px rgba(236, 72, 153, 0.3);
+        }
+
+        /* Section Cards */
+        .section-card {
+            display: none; /* Hidden initially until clicked */
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            animation: slideUp 0.4s ease forwards;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-card.tv-section { border-top: 4px solid var(--accent-tv); }
+        .section-card.phone-section { border-top: 4px solid var(--accent-phone); }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-top: 0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .tv-section .section-title { color: var(--accent-tv); }
+        .phone-section .section-title { color: var(--accent-phone); }
+
+        /* Version Subtitle */
+        .version-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin: 20px 0 10px 0;
+            color: #fff;
+            border-left: 3px solid rgba(255,255,255,0.3);
+            padding-left: 10px;
+        }
+        .tv-section .version-title { border-left-color: var(--accent-tv); }
+        .phone-section .version-title { border-left-color: var(--accent-phone); }
+
+        /* Setup Guides */
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .step-icon {
+            background: var(--glass);
+            border: 1px solid rgba(255,255,255,0.1);
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .tv-section .step-icon { color: var(--accent-tv); }
+        .phone-section .step-icon { color: var(--accent-phone); }
+
+        /* Code Grid for TV */
+        .code-container {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 18px;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .code-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .code-display {
+            background: #000;
+            border-radius: 15px;
+            padding: 12px 10px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .tv-section .code-display.main-code { border-color: var(--accent-tv); }
+
+        .code-label {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .code-number {
+            font-size: 1.4rem;
+            font-weight: 800;
+            font-family: 'Courier New', monospace;
+            color: #fff;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 10px;
+            border-radius: 16px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: var(--glass);
+            text-align: center;
+        }
+
+        .action-btn:hover { transform: translateY(-2px); }
+
+        .tv-section .btn-primary {
+            background: linear-gradient(135deg, var(--accent-tv), #0072ff);
+            color: #000;
+            border: none;
+        }
+        .phone-section .btn-primary {
+            background: linear-gradient(135deg, var(--accent-phone), #9333ea);
+            border: none;
+        }
+        .btn-player {
+            border: 1px solid var(--accent-phone);
+            background: rgba(236, 72, 153, 0.05);
+            color: #fff;
+        }
+        .phone-section .btn-player:hover { background: rgba(236, 72, 153, 0.15); }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.04);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 10px;
+            text-align: center;
+            width: calc(100% - 24px);
+        }
+        .badge-alert {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        /* Image Note Block */
+        .image-note {
+            background: rgba(245, 158, 11, 0.05);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            border-radius: 18px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .image-note img {
+            width: 100%;
+            border-radius: 12px;
+            border: 2px solid rgba(245, 158, 11, 0.3);
+            display: block;
+        }
+        
+        .image-note-caption {
+            text-align: center;
+            font-size: 13px;
+            color: var(--warning);
+            margin-top: 12px;
+            font-weight: 600;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <header class="brand-header">
+        <div class="logo-ring">
+            <i class="fas fa-tv"></i>
+        </div>
+        <h1 class="brand-name">BFA STREAM</h1>
+        <p style="color: var(--text-muted); margin: 5px 0 0 0;">S4MMTV APK For Old Device
+        <hr style="border: none; border-top: 2px solid #ef4444; margin: 20px 0;">
+        <p style="color: var(--text-muted); margin: 5px 0 0 0;">
+        BFA STREAM APK For Brand New Devices</p>
+        </header>
+
+    <div class="warning-flash">
+        ⚠️ အောက်မှာ အညွှန်းသေချာဖတ်ပါ<br>ထပ်ပြောပါမယ်အညွှန်းသေချာဖတ်ပါ<br> ⚠️ဒေါင်းလုဒ်ဆွဲမည့် "ဗားရှင်းပုံကို" နှိပ်ပြီး လမ်းညွှန်ကိုကြည့်ပါ
     </div>
-    <div class="slide fade">
-      <img src="https://s4-itmm-tv-kohl.vercel.app/movieposter.jpg" alt="Movie UI" />
-    </div>
-    <div class="slide fade">
-      <img src="https://s4-itmm-tv-kohl.vercel.app/sportposter.jpg" alt="Sidebar Menu" />
-    </div>
-    <div class="slide fade">
-      <img src="https://s4-itmm-tv-kohl.vercel.app/mmtvposter.jpg" alt="AI Tools Grid" />
-    </div>
-    <div class="slide fade">
-      <img src="https://s4-itmm-tv-kohl.vercel.app/adults.jpg" alt="AI Prompts Section" />
-    </div>
-  </div>
 
-  <div class="dots">
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
-  </div>
-<section class="download">
-  <div class="container">
-    <h2>Download S4ITMM TV(TV/BOX)</h2>
-    <p class="subtitle">Fast, safe links. Verify the file after download.</p>
+    <div class="visual-selectors">
+        <button class="img-card-btn" id="card-tv" onclick="selectVersion('tv')">
+            <img src="tv_banner.webp" alt="Android TV / Box အတွက် ဒေါင်းရန်နှိပ်ပါ">
+        </button>
 
-    <!-- Primary download buttons -->
-    <div class="buttons">
-    <a class="btn secondary" href="https://s4-itmm-tv-kohl.vercel.app/S4ITMM TV.apk" target="_blank" rel="noopener">
-        <span class="icon">⬇️</span>Main Link
-        <small class="meta">APK • Backup link</small>
-      </a>
-      <a class="btn primary" href="https://pixeldrain.com/u/EFFk3i4P" target="_blank" rel="noopener">
-        <span class="icon">⬇️</span> PixelDrain
-        <small class="meta">APK • 8.13 MB</small>
-      </a>
-
-      <a class="btn secondary" href="https://drive.google.com/file/d/1FO9E_E11rwi2hbNZdawpDBzrxyXoHvzl/view?usp=drivesdk" target="_blank" rel="noopener">
-        <span class="icon">⬇️</span> Google Drive
-        <small class="meta">APK • Backup link</small>
-      </a>
-
-      <a class="btn outline" href="https://t.me/S4MMTV" target="_blank" rel="noopener">
-        <span class="icon">📣</span> Join Telegram Channel
-        <small class="meta">@tiktok_moneymm</small>
-      </a>
+        <button class="img-card-btn" id="card-phone" onclick="selectVersion('phone')">
+            <img src="phone_banner.webp" alt="Android Phone အတွက် ဒေါင်းရန်နှိပ်ပါ">
+        </button>
     </div>
 
-    <!-- Play Store placeholder -->
-    <div class="store">
-      <button class="btn disabled" disabled>
-        <span class="icon">🛍️</span> Play Store
-        <small class="meta">Coming soon</small>
-      </button>
+    <div class="section-card tv-section" id="tv-guide">
+        <h2 class="section-title">
+            <i class="fas fa-desktop"></i> Smart TV / Android Box လမ်းညွှန်း
+        </h2>
+
+        <div class="image-note">
+            <img src="1779860173041_100.PNG" alt="S4MMTV (BFA STREAM TV)နှင့် Network Stream Player">
+            <div class="image-note-caption">
+                👆 TV ထဲမှာလည်း ဒီလို App ၂ခုလုံး ရှိရပါမယ်။ တစ်ခုပဲရှိရင် အလုပ်မလုပ်ပါဘူး
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-icon"><i class="fas fa-download"></i></div>
+            <div>Play Store မှ <b>Downloader</b> App (by AFTVnews) ကို အရင်သွင်းပြီး အောက်ပါ Code များဖြင့် ဒေါင်းလုဒ်ဆွဲနိုင်သလို၊ အောက်က ခလုတ်များဖြင့်လည်း တိုက်ရိုက်ဒေါင်းနိုင်ပါတယ်။</div>
+        </div>
+<hr style="border: none; border-top: 2px solid #ef4444; margin: 20px 0;">
+        <div class="version-title">📺 TV/BOX V-1<br>For Brand New Devices<br>စက်ဗားရှင်းအသစ်များအတွက်</div>
+        <div class="code-container">
+            <span style="font-size: 11px; color: var(--text-muted);">AFTVNEWS DOWNLOADER CODES (V1)</span>
+            <div class="code-grid">
+                <div class="code-display main-code">
+                    <span class="code-label">Version-1 Code</span>
+                    <span class="code-number">7466151</span>
+                </div>
+                <div class="code-display">
+                    <span class="code-label">Player Code</span>
+                    <span class="code-number">4606743</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="btn-group">
+            <a href="https://download-link-zeta.vercel.app/Myapk/BFASTREAMTV1.apk" class="action-btn btn-primary">
+                <i class="fas fa-download"></i> Link-1 (Vercel)
+            </a>
+            <a href="https://apkfab.com/bfa-stream-tv/com.bfa.tv/apk?h=1467776d6d51978e27bfa02cb2f7deb613a27521338a0131a2687045aa21502d" class="action-btn btn-secondary">
+                <i class="fas fa-server"></i> Link-2 (ApkFab)
+            </a>
+        </div>
+<hr style="border: none; border-top: 2px solid #ef4444; margin: 20px 0;">
+        <div class="version-title">📺 TV/BOX V-2<br>For Old Devices<br>စက်ဗားရှင်းအနိမ့်များအတွက်</div>
+        <div class="code-container">
+            <span style="font-size: 11px; color: var(--text-muted);">AFTVNEWS DOWNLOADER CODES (V2)</span>
+            <div class="code-grid">
+                <div class="code-display main-code" style="border-color: #a855f7;">
+                    <span class="code-label">Version-2 Code</span>
+                    <span class="code-number">2264327</span> </div>
+                <div class="code-display">
+                    <span class="code-label">Player Code</span>
+                    <span class="code-number">4606743</span>
+                </div>
+            </div>
+        </div>
+        <div class="btn-group">
+            <a href="https://download-link-zeta.vercel.app/Myapk/TvBoxVersion1.apk" class="action-btn btn-primary">
+                <i class="fas fa-download"></i> Link-1 (Vercel)
+            </a>
+            <a href="https://apkfab.com/s4itmm-tv/com.everstudy.s4itmm/apk?h=2740e843993eca6167ac8269b8e51afd5f96478708347b69bdfc402ab12f2fe4" class="action-btn btn-secondary">
+                <i class="fas fa-server"></i> Link-2 (ApkFab)
+            </a>
+        </div>
+
+        <div class="badge badge-alert">
+            ⚠️ TV မှာလည်း App ကော Player ကော နှစ်ခုလုံးရှိရပါမည်။
+        </div>
     </div>
 
-    <!-- Safety & install notes -->
-    <div class="notes">
-      <h3>How to install</h3>
-      <ol>
-        <li><strong>Enable unknown sources:</strong> Settings → Security → allow installs from browser or file manager.</li>
-        <li><strong>Verify the APK:</strong> Check file size and scan with your antivirus before installing.</li>
-        <li><strong>Install:</strong> Open the downloaded APK and follow prompts.</li>
-      </ol>
+    <div class="section-card phone-section" id="phone-guide">
+        <h2 class="section-title">
+            <i class="fas fa-mobile-alt"></i> Android ဖုန်း / Tablet လမ်းညွှန်း
+        </h2>
 
-      <h3>Trust & safety</h3>
-      <ul>
-        <li><strong>No ads on install:</strong> If you see unexpected pop-ups, cancel the install.</li>
-        <li><strong>Permissions:</strong> Allow only what’s necessary for streaming and updates.</li>
-        <li><strong>Stay updated:</strong> Use the Telegram channel for new builds and changelogs.</li>
-      </ul>
+        <div class="badge badge-alert" style="margin-top: 0; margin-bottom: 20px; width: auto; display: block;">
+            📢 အောက်ပါ App (၂) မျိုးလုံးကို မဖြစ်မနေ ဒေါင်းလုဒ်ဆွဲထည့်ပေးရပါမယ်။
+        </div>
+        
+        <div class="image-note">
+            <img src="1779860173041_100.PNG" alt="S4MMTV (BFA STREAM MOB)နှင့် Network Stream Player">
+            <div class="image-note-caption">
+                👆 ဖုန်းထဲမှာ ဒီလို App ၂ခုလုံး ရှိရပါမယ်။ တစ်ခုပဲရှိရင် အလုပ်မလုပ်ပါဘူး
+            </div>
+        </div>
+        <hr style="border: none; border-top: 2px solid #ef4444; margin: 20px 0;">
+        <div class="version-title">📱 PHONE V-1(For Brand New Devices)</div>
+        <div class="step">
+            <div class="step-icon">1</div>
+            <div>BFA STREAM MOB Phone App(V1) ဒေါင်းလုဒ်ဆွဲရန်။<br>ဖုန်း ဗားရှင်းအမြင့်များအတွက်</div>
+        </div>
+        <div class="btn-group">
+            <a href="https://download-link-zeta.vercel.app/Myapk/BFASTREAM(mob1).apk" class="action-btn btn-primary">
+                <i class="fas fa-file-download"></i> Link-1 (Vercel)
+            </a>
+            <a href="https://apkfab.com/s4itmm-tv/com.everstudy.s4itmm.mob/apk?h=3247323292362ae3d0a4fb9999a46e8224ee61dc2ba901abbaaad5de388ea243" class="action-btn btn-secondary">
+                <i class="fas fa-server"></i> Link-2 (ApkFab)
+            </a>
+        </div>
+<hr style="border: none; border-top: 2px solid #ef4444; margin: 20px 0;">
+        <div class="version-title">📱 PHONE V-2(For OLD devices)</div>
+        <div class="step">
+            <div class="step-icon">2</div>
+            <div>S4MMTV TV Phone App (V2) ဒေါင်းလုဒ်ဆွဲရန်။<br>ဖုန်း ဗားရှင်းအနိမ့်များအတွက်</div>
+        </div>
+        <div class="btn-group">
+            <a href="https://download-link-zeta.vercel.app/Myapk/PhoneVersion1.apk" class="action-btn btn-primary">
+                <i class="fas fa-file-download"></i> Link-1 (Vercel)
+            </a>
+            <a href="https://apkfab.com/s4itmm-tv/com.everstudy.s4itmm.mob.v2" class="action-btn btn-secondary">
+                <i class="fas fa-server"></i> Link-2 (ApkFab)
+            </a>
+        </div>
+
+        <hr style="border: none; border-top: 2px solid #ef4444; margin: 20px 0;">
+
+        <div class="version-title" style="border-left-color: var(--warning);">🎬 NETWORK STREAM PLAYER (REQUIRED)</div>
+        <div class="step">
+            <div class="step-icon"><i class="fas fa-play"></i></div>
+            <div>ရုပ်ရှင်ကြည့်ရန်အတွက် Player ကို မဖြစ်မနေ ထပ်သွင်းပေးရပါမည်။</div>
+        </div>
+        <div class="btn-group">
+            <a href="https://play.google.com/store/apps/details?id=com.genuine.leone" class="action-btn btn-player" style="grid-column: span 2;">
+                <i class="fab fa-google-play"></i> Player Link-1 (Google Play Store)
+            </a>
+        </div>
+        <div class="btn-group"> 
+            <a href="https://download-link-zeta.vercel.app/Myapk/com.genuine.leone_7.7.apk" class="action-btn btn-player" style="grid-column: span 2;">
+                <i class="fab fa-google-play"></i> Player Link-2 (Other Link)
+            </a>
+            
+        </div>
     </div>
-  </div>
-</section>
-
-<!-- Minimal styles (optional) -->
-<style>
-body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #0b1220;
-      color: #eaeef9;
-    }
-
-    .slideshow-container {
-      max-width: 100%;
-      position: relative;
-      margin: auto;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .slide {
-      display: none;
-    }
-
-    .slide img {
-      width: 100%;
-      height: auto;
-      border-radius: 12px;
-    }
-
-    .fade {
-      animation: fadeEffect 1s ease-in-out;
-    }
-
-    @keyframes fadeEffect {
-      from {opacity: 0.4}
-      to {opacity: 1}
-    }
-
-    .dots {
-      text-align: center;
-      margin-top: 8px;
-    }
-
-    .dot {
-      height: 12px;
-      width: 12px;
-      margin: 0 4px;
-      background-color: #bbb;
-      border-radius: 50%;
-      display: inline-block;
-      transition: background-color 0.3s ease;
-    }
-
-    .active {
-      background-color: #00c389;
-    }
-
-    h1 {
-      text-align: center;
-      margin: 24px 0 12px;
-      font-size: 1.8rem;
-      color: #ffd54f;
-    }
-  .download {background:#0b1220;color:#eaeef9;padding:24px;border-radius:16px}
-  .container {max-width:760px;margin:auto}
-  h2 {margin:0 0 8px;font-size:1.6rem}
-  .subtitle {margin:0 0 16px;color:#b7c0d9}
-  .buttons {display:grid;gap:12px;grid-template-columns:1fr}
-  .btn {display:flex;align-items:center;justify-content:space-between;
-        padding:14px 16px;border-radius:12px;text-decoration:none;border:1px solid transparent}
-  .btn .icon {margin-right:8px}
-  .btn .meta {opacity:.7;font-size:.85rem}
-  .btn.primary {background:#00c389;color:#061224}
-  .btn.secondary {background:#ffd54f;color:#061224}
-  .btn.outline {background:transparent;border-color:#3b4a73;color:#eaeef9}
-  .btn.disabled {background:#202a40;color:#8a93ac;border-color:#3b4a73;cursor:not-allowed}
-  .store {margin-top:6px}
-  .notes {margin-top:18px}
-  .notes h3 {margin:16px 0 8px;font-size:1.2rem}
-  ol, ul {margin:0;padding-left:18px}
-  strong {font-weight:700}
-  @media (min-width:640px){ .buttons {grid-template-columns:1fr 1fr 1fr} }
-</style>
+<hr style="border: none; border-top: 2px solid #ef4444; margin: 20px 0;">
+    <div style="text-align: center; background: var(--glass); padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); margin-top: 20px;">
+        <span style="font-size: 11px; color: var(--text-muted); letter-spacing: 2px; display: block; margin-bottom: 5px;">🔞 ADULT UNLOCK CODE</span>
+        <div style="font-size: 2rem; font-weight: bold; color: #ef4444; font-family: monospace; letter-spacing: 2px;">2026</div>
+    </div>
+<hr style="border: none; border-top: 2px solid #ef4444; margin: 20px 0;">
+    <footer class="footer" style="text-align: center; padding: 20px;">
+        © 2026 FOTMOV TV | Forever Study<br>
+        <span style="opacity: 0.5; font-size: 11px;">Providing Premium Content for All</span>
+        
+        <div style="margin-top: 12px;">
+            <a href="admin.html" style="
+                display: inline-block; 
+                background-color: #e50914; 
+                color: white; 
+                padding: 6px 16px; 
+                border-radius: 4px; 
+                text-decoration: none; 
+                font-size: 12px; 
+                font-weight: bold; 
+                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                transition: background 0.3s;">
+                Admin Dashboard
+            </a>
+        </div>
+    </footer>
+</div>
 <script>
-    let slideIndex = 0;
-    showSlides();
+    function selectVersion(version) {
+        const cardTv = document.getElementById('card-tv');
+        const cardPhone = document.getElementById('card-phone');
+        const tvGuide = document.getElementById('tv-guide');
+        const phoneGuide = document.getElementById('phone-guide');
 
-    function showSlides() {
-      let i;
-      const slides = document.getElementsByClassName("slide");
-      const dots = document.getElementsByClassName("dot");
-      for (i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-      }
-      slideIndex++;
-      if (slideIndex > slides.length) {slideIndex = 1}
-      for (i = 0; i < dots.length; i++) {
-        dots[i].classList.remove("active");
-      }
-      slides[slideIndex-1].style.display = "block";
-      dots[slideIndex-1].classList.add("active");
-      setTimeout(showSlides, 3000); // Change image every 3 seconds
+        if (version === 'tv') {
+            cardTv.classList.add('active-tv');
+            cardPhone.classList.remove('active-phone');
+            tvGuide.style.display = 'block';
+            phoneGuide.style.display = 'none';
+            tvGuide.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else if (version === 'phone') {
+            cardPhone.classList.add('active-phone');
+            cardTv.classList.remove('active-tv');
+            tvGuide.style.display = 'none';
+            phoneGuide.style.display = 'block';
+            phoneGuide.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     }
-  </script>
-  </body>
+</script>
+</body>
 </html>
-  
