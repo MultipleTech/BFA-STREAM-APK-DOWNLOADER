@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BFA STREAM - Social Links</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      color: #f8fafc;
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 30px;
+      max-width: 550px;
+      margin: 20px auto;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .profile-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px solid #fbbf24;
+      padding: 3px;
+      margin: 0 auto 1rem;
+      object-fit: cover;
+    }
+
+    .focusable {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      outline: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.8rem 1.2rem;
+      border-radius: 14px;
+      margin-bottom: 0.8rem;
+      text-decoration: none;
+      font-weight: 700;
+      border: 2px solid transparent;
+      width: 100%;
+      color: white;
+      cursor: pointer;
+    }
+
+    .focusable:focus {
+      transform: scale(1.03);
+      border-color: #fbbf24;
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+    }
+
+    .btn-playstore { background: #334155; }
+    .btn-youtube { background: #ef4444; }
+    .btn-facebook { background: #1877f2; }
+    .btn-telegram { background: #0088cc; }
+    .btn-tiktok { background: #000000; border: 1px solid rgba(255,255,255,0.1); }
+    .btn-vpn { background: #7c4dff; }
+
+    .icon-box { width: 35px; text-align: center; font-size: 1.3rem; }
+
+    @media (min-width: 1024px) {
+      .container-card { max-width: 850px; }
+      .links-grid { 
+        display: grid; 
+        grid-template-columns: 1fr 1fr; 
+        gap: 12px; 
+      }
+      .links-grid .focusable:last-child:nth-child(odd) {
+        grid-column: span 2;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container-card">
+    <img src="tvbox.png" alt="BFA STREAM" class="profile-img">
+    <h2 class="text-2xl font-black mb-1 text-white">BFA STREAM TV/MOB</h2>
+    <p class="text-slate-400 mb-6 text-sm">အောက်ပါ Admin အကောင့်များ<br> followပေးထားကြပါ</p>
+
+    <div class="links-grid">
+      <!-- အပေါ်ဆုံးမှာ ပြန်ထည့်ထားတဲ့ Download & Direct View ခလုတ်များ -->
+      <button onclick="openLink('app')" class="focusable btn-playstore" tabindex="1">
+        <div class="flex items-center gap-3">
+          <i class="fab fa-google-play icon-box text-green-400"></i>
+          <span>Apk ဒေါင်းရန်</span>
+        </div>
+        <i class="fas fa-download opacity-50 text-sm"></i>
+      </button>
+
+      <button onclick="openLink('view1')" class="focusable btn-playstore" tabindex="2">
+        <div class="flex items-center gap-3">
+          <i class="fas fa-tv icon-box text-blue-400"></i>
+          <span>iOS/PC/All Devices (Server 1)</span>
+        </div>
+        <i class="fas fa-external-link-alt opacity-50 text-xs"></i>
+      </button>
+
+      <button onclick="openLink('view2')" class="focusable btn-playstore" tabindex="3">
+        <div class="flex items-center gap-3">
+          <i class="fas fa-tv icon-box text-blue-400"></i>
+          <span>iOS/PC/All Devices (Server 2)</span>
+        </div>
+        <i class="fas fa-external-link-alt opacity-50 text-xs"></i>
+      </button>
+
+      <!-- YouTube Buttons -->
+      <button onclick="openLink('yt1')" class="focusable btn-youtube" tabindex="4">
+        <div class="flex items-center gap-3">
+          <i class="fab fa-youtube icon-box"></i>
+          <span>Buddha Dhamma</span>
+        </div>
+        <i class="fas fa-external-link-alt opacity-50 text-xs"></i>
+      </button>
+
+      <button onclick="openLink('yt2')" class="focusable btn-youtube" tabindex="5">
+        <div class="flex items-center gap-3">
+          <i class="fab fa-youtube icon-box"></i>
+          <span>BFA STREAM</span>
+        </div>
+        <i class="fas fa-external-link-alt opacity-50 text-xs"></i>
+      </button>
+
+      <!-- Facebook Buttons -->
+      <button onclick="openLink('fb3')" class="focusable btn-facebook" tabindex="6">
+        <div class="flex items-center gap-3">
+          <i class="fab fa-facebook icon-box"></i>
+          <span>Bummer Future Ai</span>
+        </div>
+        <i class="fas fa-external-link-alt opacity-50 text-xs"></i>
+      </button>
+
+      <button onclick="openLink('fb1')" class="focusable btn-facebook" tabindex="7">
+        <div class="flex items-center gap-3">
+          <i class="fab fa-facebook icon-box"></i>
+          <span>BFA STREAM-1</span>
+        </div>
+        <i class="fas fa-external-link-alt opacity-50 text-xs"></i>
+      </button>
+
+      <button onclick="openLink('fb2')" class="focusable btn-facebook" tabindex="8">
+        <div class="flex items-center gap-3">
+          <i class="fab fa-facebook icon-box"></i>
+          <span>BFA STREAM-2</span>
+        </div>
+        <i class="fas fa-external-link-alt opacity-50 text-xs"></i>
+      </button>
+
+      <button onclick="openLink('fb4')" class="focusable btn-facebook" tabindex="9">
+        <div class="flex items-center gap-3">
+          <i class="fab fa-facebook icon-box"></i>
+          <span>BFA JAV</span>
+        </div>
+        <i class="fas fa-external-link-alt opacity-50 text-xs"></i>
+      </button>
+
+      <!-- TikTok အပေါ်မှာ Telegram Bot ခလုတ် (တစ်ခုတည်း) ညှပ်ထားခြင်း -->
+      <button onclick="openLink('tg1')" class="focusable btn-telegram" tabindex="10">
+        <div class="flex items-center gap-3">
+          <i class="fab fa-telegram icon-box"></i>
+          <span>BFA Telegram Bot</span>
+        </div>
+        <i class="fas fa-external-link-alt opacity-50 text-xs"></i>
+      </button>
+
+      <!-- TikTok Buttons -->
+      <button onclick="openLink('tk1')" class="focusable btn-tiktok" tabindex="11">
+        <div class="flex items-center gap-3">
+          <i class="fab fa-tiktok icon-box"></i>
+          <span>Warrior Ring</span>
+        </div>
+        <i class="fas fa-external-link-alt opacity-50 text-xs"></i>
+      </button>
+
+      <button onclick="openLink('tk2')" class="focusable btn-tiktok" tabindex="12">
+        <div class="flex items-center gap-3">
+          <i class="fab fa-tiktok icon-box"></i>
+          <span>BFA STREAM</span>
+        </div>
+        <i class="fas fa-external-link-alt opacity-50 text-xs"></i>
+      </button>
+
+      <!-- VPN Button -->
+      <button onclick="openLink('vpn')" class="focusable btn-vpn" tabindex="13">
+        <div class="flex items-center gap-3">
+          <i class="fas fa-key icon-box text-yellow-400"></i>
+          <span>Hiddify Key</span>
+        </div>
+        <i class="fas fa-external-link-alt opacity-50 text-xs"></i>
+      </button>
+    </div>
+
+    <p class="mt-6 text-[10px] text-slate-500 uppercase tracking-widest">Powered by Burmar Future Ai Team</p>
+  </div>
+
+  <script>
+    function openLink(type) {
+      let intent = "";
+      let web = "";
+
+      switch(type) {
+        case 'app': intent = "download.html"; web = "download.html"; break;
+        case 'vpn': intent = "Vpnkey.html"; web = "Vpnkey.html"; break;
+        case 'view1': intent = "https://bamarthan-one.vercel.app/"; web = "https://bamarthan-one.vercel.app/"; break;
+        case 'view2': intent = "https://bamarthan.vercel.app/"; web = "https://bamarthan.vercel.app/"; break;
+        case 'yt1': 
+          intent = "intent://www.youtube.com/@Buddhadhamma-x2m#Intent;scheme=https;package=com.google.android.youtube;end"; 
+          web = "https://www.youtube.com/@Buddhadhamma-x2m"; 
+          break;
+        case 'yt2': 
+          intent = "intent://www.youtube.com/@fotlivemovie#Intent;scheme=https;package=com.google.android.youtube;end"; 
+          web = "https://www.youtube.com/@fotlivemovie"; 
+          break;
+        case 'fb1': 
+          intent = "fb://facewebmodal/f?href=https://www.facebook.com/share/1JDkHAvUDu/"; 
+          web = "https://www.facebook.com/share/1JDkHAvUDu/"; 
+          break;
+        case 'fb2': 
+          intent = "fb://facewebmodal/f?href=https://www.facebook.com/share/18Qiz22FHT/"; 
+          web = "https://www.facebook.com/share/18Qiz22FHT/"; 
+          break;
+        case 'fb3': 
+          intent = "fb://facewebmodal/f?href=https://www.facebook.com/share/1Czzc6vw73/"; 
+          web = "https://www.facebook.com/share/1Czzc6vw73/"; 
+          break;
+        case 'fb4': 
+          intent = "fb://facewebmodal/f?href=https://www.facebook.com/share/1Czzc6vw73/"; 
+          web = "https://www.facebook.com/share/1Czzc6vw73/"; 
+          break;
+        case 'tg1': 
+          intent = "tg://resolve?domain=BFASTREAMDownloader"; 
+          web = "https://t.me/BFASTREAMDownloader"; 
+          break;
+        case 'tk1':  
+          intent = "snssdk1128://user/profile/fightsport_myanmar"; 
+          web = "https://www.tiktok.com/@fightsport_myanmar"; 
+          break;
+        case 'tk2':  
+          intent = "snssdk1128://user/profile/fotlivemovies"; 
+          web = "https://www.tiktok.com/@fotlivemovies"; 
+          break;
+      }
+      
+      // Local links သို့မဟုတ် Web direct links များအတွက်
+      if (type === 'app' || type === 'vpn' || type === 'view1' || type === 'view2') {
+        window.location.href = web;
+        return;
+      }
+
+      const start = Date.now();
+      window.location.href = intent;
+      
+      setTimeout(() => {
+        if (Date.now() - start < 2500) {
+          window.location.href = web;
+        }
+      }, 2000);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const firstBtn = document.querySelector('.focusable');
+      if (firstBtn) firstBtn.focus();
+    });
+  </script>
+</body>
+</html>
