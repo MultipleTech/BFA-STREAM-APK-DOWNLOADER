@@ -7,7 +7,7 @@
     
     <!-- Facebook Open Graph / Link Preview -->
     <meta property="og:title" content="BFA STREAM 2026 - TV & Phone Official APK">
-    <meta property="og:description" content="Main App + Network Stream Player ၂ခုတွဲသွင်းမှ အလုပ်လုပ်မယ်။ V1/V2 ရွေးချယ်စရာ + Downloader Code အပြည့်အစုံ">
+    <meta property="og:description" content="Main App + Network Stream Player ၂ခုတွဲသွင်းမှ အလုပ်လုပ်မယ်။ Last Version အပြည့်အစုံ">
     <meta property="og:image" content="https://bfa-stream-apk-downloader.vercel.app/cover.png">
     <meta property="og:url" content="https://bfa-stream-apk-downloader.vercel.app">
     <meta property="fb:app_id" content="966242223397117">
@@ -67,6 +67,14 @@
             background: linear-gradient(to right, #fff, var(--accent-tv));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+        }
+        .ai-tag {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-top: 5px;
+            opacity: 0.8;
         }
         .warning-flash {
             background: rgba(245, 158, 11, 0.1);
@@ -152,7 +160,7 @@
         .version-title {
             font-size: 1.1rem;
             font-weight: 700;
-            margin: 20px 0 10px 0;
+            margin: 10px 0;
             color: #fff;
             border-left: 3px solid rgba(255,255,255,0.3);
             padding-left: 10px;
@@ -314,10 +322,7 @@
             <i class="fas fa-tv"></i>
         </div>
         <h1 class="brand-name">BFA STREAM</h1>
-        <p style="color: var(--text-muted); margin: 5px 0 0 0;">S4MMTV APK For Old Device
-        <hr style="border: none; border-top: 2px solid #00f2fe; margin: 20px 0;">
-        <p style="color: var(--text-muted); margin: 5px 0 0 0;">
-        BFA STREAM APK For Brand New Devices</p>
+        <div class="ai-tag"><i class="fas fa-robot"></i> Generated with AI</div>
     </header>
 
     <div class="warning-flash">
@@ -327,21 +332,26 @@
     </div>
 
     <div class="visual-selectors">
-    <button class="img-card-btn" id="card-tv" onclick="selectVersion('tv')">
-        <img src="tv_banner.webp" alt="Android TV / Box အတွက် ဒေါင်းရန်နှိပ်ပါ" onerror="this.style.display='none'">
-        <div style="padding: 15px 0; font-size: 1.1rem;"><i class="fas fa-desktop"></i> Android TV / Box အတွက် နှိပ်ပါ</div>
-    </button>
+        <!-- TV Card Button -->
+        <button class="img-card-btn" id="card-tv" onclick="selectVersion('tv')">
+            <img src="tv_banner.webp" alt="Android TV / Box အတွက် ဒေါင်းရန်နှိပ်ပါ" onerror="this.style.display='none'">
+            <div style="padding: 15px 0; font-size: 1.1rem;"><i class="fas fa-desktop"></i> Android TV / Box Last Version</div>
+        </button>
 
-    <button class="img-card-btn" id="card-phone" onclick="selectVersion('phone')">
-        <img src="phone_banner.webp" alt="Android Phone အတွက် ဒေါင်းရန်နှိပ်ပါ" onerror="this.style.display='none'">
-        <div style="padding: 15px 0; font-size: 1.1rem;"><i class="fas fa-mobile-alt"></i> Android Phone အတွက် နှိပ်ပါ</div>
-    </button>
+        <!-- Phone Card Button -->
+        <button class="img-card-btn" id="card-phone" onclick="selectVersion('phone')">
+            <img src="phone_banner.webp" alt="Android Phone အတွက် ဒေါင်းရန်နှိပ်ပါ" onerror="this.style.display='none'">
+            <div style="padding: 15px 0; font-size: 1.1rem;"><i class="fas fa-mobile-alt"></i> Android Phone Last Version</div>
+        </button>
     </div>
 
+    <!-- ================= TV SECTION ================= -->
     <div class="section-card tv-section" id="tv-guide">
         <h2 class="section-title">
             <i class="fas fa-desktop"></i> Smart TV / Android Box လမ်းညွှန်း
         </h2>
+
+        <div class="version-title">📺 TV / BOX — Last Version</div>
 
         <div class="image-note">
             <img src="tv_apps_guide.jpg" alt="BFA STREAM TV နှင့် Network Stream Player" onerror="this.parentElement.style.display='none'">
@@ -355,15 +365,12 @@
             <div>Play Store မှ <b>Downloader</b> App (by AFTVnews) ကို အရင်သွင်းပြီး အောက်ပါ Code များဖြင့် ဒေါင်းလုဒ်ဆွဲနိုင်သလို၊ အောက်က ခလုတ်များဖြင့်လည်း တိုက်ရိုက်ဒေါင်းနိုင်ပါတယ်။</div>
         </div>
         
-        <hr style="border: none; border-top: 2px solid #00f2fe; margin: 20px 0;">
-        
-        <div class="version-title">📺 TV/BOX V-1<br>For Brand New Devices<br>စက်ဗားရှင်းအသစ်များ / Android 9+</div>
         <div class="code-container">
-            <span style="font-size: 11px; color: var(--text-muted);">AFTVNEWS DOWNLOADER CODES (V1)</span>
+            <span style="font-size: 11px; color: var(--text-muted);">AFTVNEWS DOWNLOADER CODES</span>
             <div class="code-grid">
                 <div class="code-display main-code">
-                    <span class="code-label">Version-1 Code</span>
-                    <span class="code-number">7466151</span>
+                    <span class="code-label">Main App Code</span>
+                    <span class="code-number">6831823</span>
                 </div>
                 <div class="code-display">
                     <span class="code-label">Player Code</span>
@@ -376,32 +383,8 @@
             <a href="https://bfa-stream-apk-downloader.vercel.app/Myapk/BFASTREAMTV1.apk" class="action-btn btn-primary">
                 <i class="fas fa-download"></i> Link-1 (Vercel)
             </a>
-            <a href="https://www.mediafire.com/file/82prrirhy3lut6b/BFASTREAMTV1.apk/file" class="action-btn btn-secondary">
-                <i class="fas fa-server"></i> Link-2 (ApkFab)
-            </a>
-        </div>
-        
-        <hr style="border: none; border-top: 2px solid #00f2fe; margin: 20px 0;">
-        
-        <div class="version-title">📺 TV/BOX V-2<br>For Old Devices<br>စက်ဗားရှင်းအနိမ့်များ / Android 7, 8</div>
-        <div class="code-container">
-            <span style="font-size: 11px; color: var(--text-muted);">AFTVNEWS DOWNLOADER CODES (V2)</span>
-            <div class="code-grid">
-                <div class="code-display main-code" style="border-color: #a855f7;">
-                    <span class="code-label">Version-2 Code</span>
-                    <span class="code-number">2264327</span> </div>
-                <div class="code-display">
-                    <span class="code-label">Player Code</span>
-                    <span class="code-number">4606743</span>
-                </div>
-            </div>
-        </div>
-        <div class="btn-group">
-            <a href="https://bfa-stream-apk-downloader.vercel.app/Myapk/TvBoxVersion1.apk" class="action-btn btn-primary">
-                <i class="fas fa-download"></i> Link-1 (Vercel)
-            </a>
-            <a href="https://apkfab.com/s4itmm-tv/com.everstudy.s4itmm/apk" class="action-btn btn-secondary">
-                <i class="fas fa-server"></i> Link-2 (ApkFab)
+            <a href="https://www.mediafire.com/file/w9vdcmyiaux6cqv/BFASTREAMTV1.apk/file" class="action-btn btn-secondary">
+                <i class="fas fa-server"></i> Link-2 (MediaFire)
             </a>
         </div>
 
@@ -410,10 +393,13 @@
         </div>
     </div>
 
+    <!-- ================= PHONE SECTION ================= -->
     <div class="section-card phone-section" id="phone-guide">
         <h2 class="section-title">
             <i class="fas fa-mobile-alt"></i> Android ဖုန်း / Tablet လမ်းညွှန်း
         </h2>
+
+        <div class="version-title">📱 PHONE VERSION — Last Version</div>
 
         <div class="badge badge-alert" style="margin-top: 0; margin-bottom: 20px; width: auto; display: block;">
             📢 အောက်ပါ App (၂) မျိုးလုံးကို မဖြစ်မနေ ဒေါင်းလုဒ်ဆွဲထည့်ပေးရပါမယ်
@@ -426,35 +412,16 @@
             </div>
         </div>
         
-        <hr style="border: none; border-top: 2px solid #ec4899; margin: 20px 0;">
-        
-        <div class="version-title">📱 PHONE V-1 - ဖုန်းဗားရှင်းအမြင့်များ / Android 9+</div>
         <div class="step">
             <div class="step-icon">1</div>
-            <div>BFA STREAM MOB Phone App (V1) ဒေါင်းလုဒ်ဆွဲရန်<br>ဖုန်း ဗားရှင်းအမြင့်များအတွက်</div>
+            <div>BFA STREAM MOB Phone App ဒေါင်းလုဒ်ဆွဲရန်</div>
         </div>
         <div class="btn-group">
             <a href="https://bfa-stream-apk-downloader.vercel.app/Myapk/BFASTREAM(mob1).apk" class="action-btn btn-primary">
                 <i class="fas fa-file-download"></i> Link-1 (Vercel)
             </a>
-            <a href="https://www.mediafire.com/file/76y0udl4suov38d/BFASTREAM(mob1).apk/file" class="action-btn btn-secondary">
-                <i class="fas fa-server"></i> Link-2 (ApkFab)
-            </a>
-        </div>
-        
-        <hr style="border: none; border-top: 2px solid #ec4899; margin: 20px 0;">
-        
-        <div class="version-title">📱 PHONE V-2 - ဖုန်းဗားရှင်းအနိမ့်များ / Android 7, 8</div>
-        <div class="step">
-            <div class="step-icon">2</div>
-            <div>S4MMTV Phone App (V2) ဒေါင်းလုဒ်ဆွဲရန်<br>ဖုန်း ဗားရှင်းအနိမ့်များအတွက်</div>
-        </div>
-        <div class="btn-group">
-            <a href="https://bfa-stream-apk-downloader.vercel.app/Myapk/PhoneVersion1.apk" class="action-btn btn-primary">
-                <i class="fas fa-file-download"></i> Link-1 (Vercel)
-            </a>
-            <a href="https://www.mediafire.com/file/caem9smc4fstvnp/TvBoxVersion2.apk/file" class="action-btn btn-secondary">
-                <i class="fas fa-server"></i> Link-2 (ApkFab)
+            <a href="https://www.mediafire.com/file/blldkuwi56y1r02/BFASTREAM(mob1).apk/file" class="action-btn btn-secondary">
+                <i class="fas fa-server"></i> Link-2 (MediaFire)
             </a>
         </div>
 
@@ -484,6 +451,7 @@
         <span style="opacity: 0.5; font-size: 11px;">Providing Premium Content for All</span>
     </footer>
 </div>
+
 <script>
     function selectVersion(version) {
         const cardTv = document.getElementById('card-tv');
@@ -508,4 +476,3 @@
 </script>
 </body>
 </html>
-    
