@@ -1,19 +1,76 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>MMFOT Player</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artplayer Stream</title>
     <style>
-        body { margin:0; background:#000; }
-        #video { width:100%; height:100vh; }
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .artplayer-app {
+            width: 100vw;
+            height: 100vh;
+        }
     </style>
+    <!-- FLV stream ဖတ်နိုင်ရန် mpegts.js ကို သုံးပါမည် -->
+    <script src="https://cdn.jsdelivr.net/npm/mpegts.js@latest/dist/mpegts.min.js"></script>
+    <!-- Artplayer Library -->
+    <script src="https://cdn.jsdelivr.net/npm/artplayer/dist/artplayer.js"></script>
 </head>
 <body>
-    <video id="video" controls autoplay></video>
+
+    <div class="artplayer-app"></div>
+
     <script>
+        // URL Parameter ထဲက videoUrl ကို ဆွဲထုတ်ခြင်း
         const urlParams = new URLSearchParams(window.location.search);
-        const streamUrl = urlParams.get('url');
-        const video = document.getElementById('video');
-        video.src = streamUrl;
+        const videoUrl = urlParams.get('videoUrl');
+
+        if (!videoUrl) {
+            document.body.innerHTML = '<h3 style="color: #fff; font-family: sans-serif;">Video URL မတွေ့ရှိပါ။ URL parameter တွင် ?videoUrl= ထည့်သွင်းပေးပါ။</h3>';
+        } else {
+            const art = new Artplayer({
+                container: '.artplayer-app',
+                url: videoUrl,
+                type: 'flv',
+                isLive: true,         // Live stream အတွက် true ထားပါသည်
+                autoplay: true,
+                pip: true,
+                screenshot: true,
+                setting: true,
+                fullscreen: true,
+                fullscreenWeb: true,
+                customType: {
+                    flv: function (video, url, art) {
+                        if (mpegts.isSupported()) {
+                            const flvPlayer = mpegts.createPlayer({
+                                type: 'flv',
+                                url: url,
+                                isLive: true,
+                            });
+                            flvPlayer.attachMediaElement(video);
+                            flvPlayer.load();
+
+                            // Player ပိတ်သွားပါက Memory leak မဖြစ်အောင် ရှင်းထုတ်ခြင်း
+                            art.on('destroy', () => {
+                                flvPlayer.destroy();
+                            });
+                        } else {
+                            art.notice.show = 'သင့် Browser တွင် FLV Playback မပံ့ပိုးပါ။';
+                        }
+                    },
+                },
+            });
+        }
     </script>
 </body>
 </html>
