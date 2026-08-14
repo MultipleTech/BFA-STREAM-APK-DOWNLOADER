@@ -1,0 +1,58 @@
+<style>
+/* ===== player-1.css content ===== */
+.My-Player {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  position: relative;
+}
+
+.player-controls {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 2;
+}
+
+/* more styles from player-1.css... */
+
+/* ===== player.css content ===== */
+.btn-11.custom-btn {
+  background: linear-gradient(135deg, #1e5799 0%, #2989d8 50%, #207cca 100%);
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.btn-11.custom-btn:hover {
+  background: linear-gradient(135deg, #207cca 0%, #2989d8 50%, #1e5799 100%);
+}
+
+.btn2 {
+  background-color: #111;
+  color: #fff;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+.card1 {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Add additional necessary shared styles below if needed */
+</style>

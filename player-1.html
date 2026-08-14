@@ -1,0 +1,48 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bigcash Player</title>
+
+  <!-- PlayerJS -->
+  <script src="https://cdn.jsdelivr.net/npm/playerjs@latest" type="text/javascript"></script>
+
+  <style>
+    body {
+      margin: 0;
+      background-color: #000;
+    }
+    #player {
+      width: 100vw;
+      height: 100vh;
+      background-color: black;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Player Container -->
+  <div id="player"></div>
+
+  <!-- Video Script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const videoUrl = urlParams.get("videoUrl");
+
+      if (videoUrl && (videoUrl.startsWith("http://") || videoUrl.startsWith("https://"))) {
+        Playerjs({
+          id: "player",
+          file: videoUrl,
+          autoplay: 1,
+          poster: "https://i.postimg.cc/TPGR0t27/share4it.jpg",
+          title: "MM Sport TV"
+        });
+      } else {
+        document.getElementById("player").innerHTML = "<h2 style='color:red; text-align:center;'>Video URL not found or invalid</h2>";
+      }
+    });
+  </script>
+</body>
+</html>

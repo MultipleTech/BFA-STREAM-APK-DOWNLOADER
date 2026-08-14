@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bigcash Player</title>
+
+  <!-- Combined Styles -->
+  <link rel="stylesheet" href="https://subuu-gq2t.vercel.app/bigcash-player/combined-player.css">
+  
+  <!-- လုံခြုံရေးအတွက် အောက်ပါ Script ကို ဖြုတ်ထားပါတယ် -->
+  <!-- <script type='text/javascript' src='//borrowbrutewarfare.com/1c/cc/7b/1ccc7b680b3bc850b8f004d160eba527.js'></script> -->
+</head>
+<body>
+
+  <center>
+    <button onclick="handleNavigation('/')"
+      class="btn-11 custom-btn"
+      style="width: 100%; font-weight: 1000; font-size: 20px; position: sticky; top: 0px; z-index: 3; font-family: Lucida Sans Unicode; line-height: 1rem;">
+      Bigcash PLAYER
+    </button>
+  </center>
+
+  <!-- Player Container -->
+  <div id="player" class="My-Player"></div>
+
+  <!-- Modified Player Script -->
+  <script src="https://msportmm.vercel.app/myjs/player.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    // WebView နဲ့အလုပ်လုပ်ဖို့ Function
+    function handleNavigation(url) {
+      if(typeof AndroidBridge !== 'undefined') {
+        // Android WebView အတွက်
+        AndroidBridge.loadUrl(url);
+      } else if(window.webkit && window.webkit.messageHandlers.iosBridge) {
+        // iOS WebView အတွက်
+        window.webkit.messageHandlers.iosBridge.postMessage(url);
+      } else {
+        // ပုံမှန် Browser အတွက်
+        window.location.href = url;
+      }
+    }
+
+    // Video Player Initialization
+    const urlParams = new URLSearchParams(window.location.search);
+    const videoUrl = urlParams.get('videoUrl');
+
+    if(videoUrl){
+      Playerjs({
+        id: "player",
+        file: videoUrl,
+        autoplay: 1,
+        poster: "https://i.postimg.cc/TPGR0t27/share4it.jpg",
+        // WebView Friendly Configuration
+        androidhls: true,
+        crossorigin: "anonymous"
+      });
+    } else {
+      document.getElementById("player").innerHTML = "<h3 style='color: red;'>Video URL Not Found!</h3>";
+    }
+  </script>
+
+  <br>
+  <center>
+    <button onclick="handleNavigation('https://tinyurl.com/2vzy2fy4')" class="btn2">
+      <div class="container">
+        <img class="card1" src="https://i.postimg.cc/rmDg5bgr/1747605442397-pic.png" />
+        <figcaption><h3 data-lang-key="bonus">Go to rich</h3></figcaption>
+      </div>
+    </button>
+  </center>
+  
+  <center>
+    <!-- Facebook & Ad Link (Modified) -->
+    <div class="sp">
+      <a href="javascript:handleNavigation('https://www.facebook.com/S4ITMM')">
+        <div class="container16"></div>
+      </a>
+    </div>
+
+    <!-- Copyright -->
+    <div class="copyright">
+      <h5 class="text-center">
+        Copyright © 2025
+        <a href="javascript:handleNavigation('https://www.facebook.com/share/16KnAQDaJs/')">*Big Cash*</a>.
+        All Rights Reserved.
+      </h5>
+    </div>
+  </center>
+
+</body>
+</html>
