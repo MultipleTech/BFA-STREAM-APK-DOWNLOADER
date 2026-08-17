@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hiddify Key Manager</title>
+    <style>
+        :root {
+            --primary-color: #7c4dff;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .instruction-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--primary-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .key-card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+
+        .key-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .key-info {
+            overflow: hidden;
+            margin-right: 10px;
+        }
+
+        .key-name {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 5px;
+        }
+
+        .key-url {
+            font-size: 0.8rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #cbd5e1;
+        }
+
+        .copy-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+
+        .copy-btn:active {
+            opacity: 0.8;
+        }
+
+        .footer-note {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            background: rgba(124, 77, 255, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2>Hiddify Key ရယူရန်</h2>
+    </div>
+
+    <div class="instruction-card">
+        <h3 style="margin-top: 0;">အသုံးပြုနည်း</h3>
+        <p>၁။ အောက်ပါ Key များထဲမှ တစ်ခုကို <b>Copy</b> နှိပ်ပါ။</p>
+        <p>၂။ Hiddify App ထဲတွင် <b>+ (Plus)</b> ကိုနှိပ်ပါ။</p>
+        <p>၃။ <b>Add from Clipboard</b> ကို နှိပ်ပြီး Update လုပ်ပါ။</p>
+    </div>
+
+    <div id="key-list"></div>
+
+    <div class="footer-note">
+        💡 <b>Tip:</b> ချိတ်မရပါက Setting ထဲတွင် <b>Fragment</b> ကို On ပေးပါ။ ဖုန်းအချိန်မှန်မမှန် စစ်ဆေးပါ။
+    </div>
+</div>
+
+<script>
+    const keys = [
+        { name: "Clash Reality", url: "https://raw.githubusercontent.com/Mosifree/-FREE2CONFIG/refs/heads/main/Clash_Reality" },
+        { name: "Reality Default", url: "https://raw.githubusercontent.com/Mosifree/-FREE2CONFIG/refs/heads/main/Reality" },
+        { name: "MDR Config", url: "https://raw.githubusercontent.com/MrBihal/Hddify/refs/heads/main/MDR" },
+        { name: "Movaghat", url: "https://raw.githubusercontent.com/Mosifree/-FREE2CONFIG/refs/heads/main/Movaghat" },
+        { name: "Warp/Portal", url: "https://shz.al/N527:/~@sorenab1,h/warp,ortall" }
+    ];
+
+    const keyList = document.getElementById('key-list');
+
+    keys.forEach(key => {
+        const div = document.createElement('div');
+        div.className = 'key-card';
+        div.innerHTML = `
+            <div class="key-info">
+                <div class="key-name">${key.name}</div>
+                <div class="key-url">${key.url}</div>
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard('${key.url}', this)">Copy</button>
+        `;
+        keyList.appendChild(div);
+    });
+
+    function copyToClipboard(text, btn) {
+        navigator.clipboard.writeText(text).then(() => {
+            const originalText = btn.innerText;
+            btn.innerText = "Copied!";
+            btn.style.backgroundColor = "#22c55e";
+            setTimeout(() => {
+                btn.innerText = originalText;
+                btn.style.backgroundColor = "#7c4dff";
+            }, 2000);
+        });
+    }
+</script>
+
+</body>
+</html>
+  
