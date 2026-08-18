@@ -21,8 +21,8 @@
             height: 100vh;
         }
     </style>
-    <!-- FLV stream ဖတ်နိုင်ရန် mpegts.js ကို သုံးပါမည် -->
-    <script src="https://cdn.jsdelivr.net/npm/mpegts.js@latest/dist/mpegts.min.js"></script>
+    <!-- .m3u8 (HLS) stream ဖတ်နိုင်ရန် hls.js ကို သုံးပါမည် -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <!-- Artplayer Library -->
     <script src="https://cdn.jsdelivr.net/npm/artplayer/dist/artplayer.js"></script>
 </head>
@@ -31,18 +31,17 @@
     <div class="artplayer-app"></div>
 
     <script>
-        // URL Parameter ထဲက videoUrl ကို ဆွဲထုတ်ခြင်း
         const urlParams = new URLSearchParams(window.location.search);
         const videoUrl = urlParams.get('videoUrl');
 
         if (!videoUrl) {
-            document.body.innerHTML = '<h3 style="color: #fff; font-family: sans-serif;">Video URL မတွေ့ရှိပါ။ URL parameter တွင် ?videoUrl= ထည့်သွင်းပေးပါ။</h3>';
+            document.body.innerHTML = '<h3 style="color: #fff; font-family: sans-serif; text-align: center;">Video URL မတွေ့ရှိပါ။ URL parameter တွင် ?videoUrl= ထည့်သွင်းပေးပါ။</h3>';
         } else {
             const art = new Artplayer({
                 container: '.artplayer-app',
                 url: videoUrl,
-                type: 'flv',
-                isLive: true,         // Live stream အတွက် true ထားပါသည်
+                type: 'm3u8',
+                isLive: true,
                 autoplay: true,
                 pip: true,
                 screenshot: true,
@@ -50,22 +49,21 @@
                 fullscreen: true,
                 fullscreenWeb: true,
                 customType: {
-                    flv: function (video, url, art) {
-                        if (mpegts.isSupported()) {
-                            const flvPlayer = mpegts.createPlayer({
-                                type: 'flv',
-                                url: url,
-                                isLive: true,
-                            });
-                            flvPlayer.attachMediaElement(video);
-                            flvPlayer.load();
+                    m3u8: function (video, url, art) {
+                        if (Hls.isSupported()) {
+                            if (art.hls) art.hls.destroy();
+                            const hls = new Hls();
+                            hls.loadSource(url);
+                            hls.attachMedia(video);
+                            art.hls = hls;
 
-                            // Player ပိတ်သွားပါက Memory leak မဖြစ်အောင် ရှင်းထုတ်ခြင်း
                             art.on('destroy', () => {
-                                flvPlayer.destroy();
+                                hls.destroy();
                             });
+                        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                            video.src = url;
                         } else {
-                            art.notice.show = 'သင့် Browser တွင် FLV Playback မပံ့ပိုးပါ။';
+                            art.notice.show = 'သင့် Browser တွင် HLS Playback မပံ့ပိုးပါ။';
                         }
                     },
                 },
