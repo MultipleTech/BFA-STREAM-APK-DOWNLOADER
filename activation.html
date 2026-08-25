@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TV / BOX ACTIVATION</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: #0f172a;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .tv-container { width: 100%; max-width: 600px; }
+    .tv-card {
+      background-color: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+    .tv-header {
+      border-bottom: 1px solid #334155;
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .tv-title { font-size: 22px; color: #38bdf8; margin-bottom: 12px; font-weight: bold; }
+    .tv-badge {
+      background-color: #0f172a;
+      padding: 10px 16px;
+      border-radius: 8px;
+      display: inline-block;
+      font-size: 15px;
+      border: 1px solid #334155;
+    }
+    .tv-id { color: #f59e0b; font-weight: bold; font-family: monospace; font-size: 16px; margin: 0 6px; }
+    .days-active { color: #22c55e; font-weight: bold; margin-left: 6px; }
+    .days-expired { color: #ef4444; font-weight: bold; margin-left: 6px; }
+    .tv-info-box {
+      background-color: #0f172a;
+      border-left: 4px solid #38bdf8;
+      padding: 16px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+    .tv-info-title { font-size: 16px; color: #f8fafc; margin-bottom: 6px; }
+    .tv-info-sub { font-size: 13px; color: #94a3b8; margin-bottom: 12px; line-height: 1.4; }
+    .tv-steps { padding-left: 20px; font-size: 14px; color: #cbd5e1; line-height: 1.8; }
+    .text-green { color: #4ade80; font-weight: bold; }
+    .text-gold { color: #fbbf24; font-weight: bold; }
+    .tv-contact-box {
+      background-color: #0f172a;
+      border-left: 4px solid #f59e0b;
+      padding: 16px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+    .tv-contact-title { font-size: 16px; color: #f8fafc; margin-bottom: 6px; }
+    .tv-contact-sub { font-size: 13px; color: #94a3b8; margin-bottom: 12px; }
+    .tv-btn-primary {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background-color: #2563eb;
+      color: #ffffff;
+      padding: 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 15px;
+      box-sizing: border-box;
+    }
+    .tv-btn-secondary {
+      width: 100%;
+      background-color: #334155;
+      color: #94a3b8;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .tv-btn-secondary:hover { background-color: #475569; color: #fff; }
+  </style>
+</head>
+<body>
+
+  <div class="tv-container">
+    <div class="tv-card">
+      
+      <!-- HEADER -->
+      <div class="tv-header">
+        <h2 class="tv-title">TV / BOX ACTIVATION</h2>
+        <div class="tv-badge">
+          <span style="color: #94a3b8;">TV ID:</span>
+          <span id="tv-id-display" class="tv-id">ထုတ်ယူနေဆဲ...</span>
+          <span style="color: #475569;">|</span>
+          <span style="color: #94a3b8;">လက်ကျန်:</span>
+          <span id="tv-days-display" class="days-expired">...</span>
+        </div>
+      </div>
+
+      <!-- MOBILE PAYMENT GUIDE -->
+      <div class="tv-info-box">
+        <h3 class="tv-info-title">📱 Mobile Phone App မှ ငွေပေးချေရန်</h3>
+        <p class="tv-info-sub">
+          TV Screen တွင် Screenshot တင်ရန် မလိုဘဲ ဖုန်းမှ Auto Approve လုပ်ဆောင်နိုင်ပါသည်။
+        </p>
+        <ol class="tv-steps">
+          <li>သင့် Mobile Phone တွင် App / Web ကို ဖွင့်ပါ။</li>
+          <li>Payment ဖြည့်သွင်းသည့် စာမျက်နှာသို့ သွားပါ။</li>
+          <li>
+            <span class="text-green">"ဒုတိယ Device ID"</span> နေရာတွင် ဤ TV ID (
+            <span id="tv-id-step" class="text-gold">—</span>) ကို ထည့်သွင်းပါ။
+          </li>
+          <li>
+            KBZPay ပြေစာ တင်လိုက်သည်နှင့် TV တွင်ပါ <span class="text-green">Premium သက်တမ်း တိုက်ရိုက် ရရှိမည်</span> ဖြစ်ပါသည်။
+          </li>
+        </ol>
+      </div>
+
+      <!-- CONTACT SECTION -->
+      <div class="tv-contact-box">
+        <h3 class="tv-contact-title">📞 Direct Contact Support</h3>
+        <p class="tv-contact-sub">
+          ငွေလွှဲ အဆင်မပြေပါက သို့မဟုတ် အကူအညီလိုအပ်ပါက တိုက်ရိုက် ဆက်သွယ်နိုင်ပါသည်။
+        </p>
+        <a href="/contact.html" class="tv-btn-primary">
+          📞 တိုက်ရိုက်ဆက်သွယ်ရန် (Contact Main)
+        </a>
+      </div>
+
+      <!-- FREE WATCH -->
+      <div>
+        <button id="btn-free-watch" class="tv-btn-secondary">
+          🎬 CONTINUE AS FREE USER (WITH ADS)
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var API_BASE = "https://bfa-next-api.vercel.app";
+      var APPROVED_USERS_URL = API_BASE + "/api/approved-users";
+      var AUTO_REGISTER_URL = API_BASE + "/api/auto-register";
+      var DEFAULT_SEASON_PASS = "2026-08-19T23:59:59Z";
+      var FREE_TRIAL_URL = "http://bamarthan.vercel.app/index.html";
+
+      var tvIdDisplay = document.getElementById('tv-id-display');
+      var tvDaysDisplay = document.getElementById('tv-days-display');
+      var tvIdStep = document.getElementById('tv-id-step');
+      var btnFreeWatch = document.getElementById('btn-free-watch');
+
+      function safeGetLocalStorage(key) {
+        try {
+          if (window.localStorage) return localStorage.getItem(key);
+        } catch (e) {}
+        return null;
+      }
+
+      function safeSetLocalStorage(key, value) {
+        try {
+          if (window.localStorage) localStorage.setItem(key, value);
+        } catch (e) {}
+      }
+
+      function getQueryParam(param) {
+        try {
+          var search = window.location.search;
+          if (!search) return null;
+          var match = RegExp('[?&]' + param + '=([^&]*)').exec(search);
+          return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function generateStableID() {
+        try {
+          var urlId = getQueryParam('id');
+          var storedId = urlId || safeGetLocalStorage("s4itmm_stable_id") || safeGetLocalStorage("zetflix_device_id_tv");
+
+          if (storedId) {
+            safeSetLocalStorage("s4itmm_stable_id", storedId);
+            safeSetLocalStorage("zetflix_device_id_tv", storedId);
+            return storedId;
+          }
+
+          var canvas = document.createElement('canvas');
+          var ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
+
+          if (ctx) {
+            var txt = 'BFA STREAM-TV-DEVICE-ID-2026';
+            ctx.textBaseline = "top";
+            ctx.font = "14px Arial";
+            ctx.fillStyle = "#f60";
+            ctx.fillRect(125, 1, 62, 20);
+            ctx.fillStyle = "#069";
+            ctx.fillText(txt, 2, 15);
+
+            var b64 = canvas.toDataURL().replace("data:image/png;base64,", "");
+            var hash = 0;
+            for (var i = 0; i < b64.length; i++) {
+              hash = (hash << 5) - hash + b64.charCodeAt(i);
+              hash = hash & hash;
+            }
+
+            var screenInfo = (window.screen ? window.screen.width || 0 : 0) + "x" + (window.screen ? window.screen.height || 0 : 0);
+            var platform = navigator.platform || "unknown";
+            var finalRaw = Math.abs(hash).toString() + platform + screenInfo;
+
+            var finalHash = 0;
+            for (var j = 0; j < finalRaw.length; j++) {
+              finalHash = (finalHash << 5) - finalHash + finalRaw.charCodeAt(j);
+            }
+            var finalID = Math.abs(finalHash).toString();
+            while (finalID.length < 12) { finalID = "0" + finalID; }
+            finalID = finalID.slice(0, 12);
+
+            safeSetLocalStorage("s4itmm_stable_id", finalID);
+            safeSetLocalStorage("zetflix_device_id_tv", finalID);
+            return finalID;
+          }
+        } catch (e) {}
+
+        var fallbackID = Math.floor(100000000000 + Math.random() * 900000000000).toString();
+        safeSetLocalStorage("s4itmm_stable_id", fallbackID);
+        safeSetLocalStorage("zetflix_device_id_tv", fallbackID);
+        return fallbackID;
+      }
+
+      function checkAccess(cleanId) {
+        var fetchUrl = APPROVED_USERS_URL + "?deviceID=" + cleanId + "&t=" + Date.now();
+        
+        fetch(fetchUrl, { cache: "no-store" })
+          .then(function(res) {
+            if (!res.ok) throw new Error("API Network error");
+            return res.json();
+          })
+          .then(function(data) {
+            var user = null;
+            var approvedUsers = [];
+
+            if (Array.isArray(data)) {
+              approvedUsers = data;
+            } else if (data && Array.isArray(data.users)) {
+              approvedUsers = data.users;
+            } else if (data && Array.isArray(data.data)) {
+              approvedUsers = data.data;
+            } else if (data && typeof data === 'object') {
+              var targetId = cleanId.toLowerCase();
+              var keys = Object.keys(data);
+              for (var k = 0; k < keys.length; k++) {
+                if (keys[k].trim().toLowerCase() === targetId) {
+                  user = data[keys[k]];
+                  break;
+                }
+              }
+              if (!user && (data.id || data.deviceID)) user = data;
+            }
+
+            if (!user && approvedUsers.length > 0) {
+              var targetId = cleanId.toLowerCase();
+              for (var i = 0; i < approvedUsers.length; i++) {
+                var u = approvedUsers[i];
+                var uId = String(u.id || u.deviceID || u.device_id || '').trim().toLowerCase();
+                if (uId === targetId) {
+                  user = u;
+                  break;
+                }
+              }
+            }
+
+            if (!user) {
+              return fetch(AUTO_REGISTER_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: cleanId, type: "tv" })
+              })
+              .then(function(r) { return r.json(); })
+              .then(function(regData) {
+                return (regData && regData.user) ? regData.user : { id: cleanId, expires: DEFAULT_SEASON_PASS };
+              })
+              .catch(function() {
+                return { id: cleanId, expires: DEFAULT_SEASON_PASS };
+              });
+            }
+
+            return user;
+          })
+          .then(function(user) {
+            if (!user) return;
+
+            var calcDays = 0;
+            var expStr = user.expires || user.approved_until || user.expired_at || user.expire_date;
+
+            if (expStr) {
+              var expDate = new Date(expStr);
+              if (!isNaN(expDate.getTime())) {
+                var today = new Date();
+                var diffTime = expDate.getTime() - today.getTime();
+                calcDays = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+              }
+            } else if (user.days !== undefined) {
+              calcDays = Number(user.days);
+            }
+
+            var daysResult = String(isNaN(calcDays) ? 0 : calcDays);
+            tvDaysDisplay.textContent = daysResult + " ရက်";
+            
+            if (Number(daysResult) > 0) {
+              tvDaysDisplay.className = "days-active";
+            } else {
+              tvDaysDisplay.className = "days-expired";
+            }
+
+            safeSetLocalStorage('zetflix_remaining_days', daysResult);
+          })
+          .catch(function(err) {
+            console.error("Access check error:", err);
+            tvDaysDisplay.textContent = "0 ရက်";
+          });
+      }
+
+      // Initialize
+      var deviceID = generateStableID();
+      tvIdDisplay.textContent = deviceID;
+      tvIdStep.textContent = deviceID;
+
+      if (deviceID) {
+        checkAccess(deviceID);
+      }
+
+      // Event listener for Free watch
+      btnFreeWatch.addEventListener('click', function() {
+        safeSetLocalStorage('zetflix_approved', 'false');
+        safeSetLocalStorage('zetflix_mode', 'free');
+        window.location.href = FREE_TRIAL_URL;
+      });
+
+    })();
+  </script>
+</body>
+            </html>
+            
