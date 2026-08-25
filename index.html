@@ -10,6 +10,7 @@
   <meta property="og:type" content="website" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
     body {
       min-height: 100vh;
       font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -23,6 +24,7 @@
       justify-content: center;
       padding: 1rem;
     }
+
     .card {
       width: 100%;
       max-width: 560px;
@@ -34,34 +36,47 @@
       padding: 1.75rem 1.25rem;
       text-align: center;
     }
+
     @media (min-width: 768px) {
       .card { max-width: 860px; padding: 2.5rem; }
       .grid { grid-template-columns: 1fr 1fr; }
     }
-    .btn.moneycolor {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: #ffffff;
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
-}
 
-.btn.moneycolor:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
-  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
-}
+    /* Logo Styling */
     .logo {
-      width: 96px; height: 96px;
+      width: 96px; 
+      height: 96px;
       margin: 0 auto;
       border-radius: 50%;
       border: 3px solid #fcd34d;
       padding: 3px;
       background: rgba(15,23,42,0.6);
-      display: flex; align-items: center; justify-content: center;
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
       font-size: 2rem;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(252, 211, 77, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
+
+    .logo:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(252, 211, 77, 0.4);
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
     h1 { margin-top: 1.25rem; font-size: 1.4rem; font-weight: 900; }
     h1 span { color: #fcd34d; }
+    
     .sub { margin-top: 0.5rem; font-size: 13px; color: #94a3b8; line-height: 1.6; }
+    
     .badge {
       display: inline-flex; align-items: center; gap: 0.5rem;
       margin-top: 1rem; padding: 0.35rem 0.75rem;
@@ -71,11 +86,14 @@
       font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
       text-transform: uppercase; color: #6ee7b7;
     }
+    
     .badge .dot {
       width: 8px; height: 8px; border-radius: 50%;
       background: #34d399; animation: pulse 2s infinite;
     }
+    
     @keyframes pulse { 50% { opacity: 0.5; } }
+
     .grid {
       margin-top: 2rem;
       display: grid;
@@ -83,6 +101,8 @@
       gap: 0.75rem;
       text-align: left;
     }
+
+    /* Base Button Styling */
     .btn {
       display: flex; align-items: center; justify-content: space-between;
       gap: 0.5rem; width: 100%;
@@ -91,11 +111,14 @@
       border: 2px solid transparent;
       font-weight: 700; font-size: 13px;
       color: #fff; text-decoration: none;
-      cursor: pointer; transition: 0.2s;
+      cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .btn:hover { filter: brightness(1.1); transform: scale(1.01); }
-    .btn:active { transform: scale(0.99); }
+
+    .btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
+    .btn:active { transform: translateY(0); }
+
     .btn-inner { display: flex; align-items: center; gap: 0.75rem; min-width: 0; flex: 1; }
+    
     .icon {
       width: 34px; height: 34px; flex-shrink: 0;
       border-radius: 10px;
@@ -103,7 +126,10 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 16px;
     }
+    
     .btn span.label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    /* Button Colors */
     .slate { background: #334155; }
     .red { background: #ef4444; }
     .blue { background: #1877f2; }
@@ -113,6 +139,19 @@
     .gold { background: linear-gradient(135deg, #b45309, #f59e0b); }
     .adult { background: #9f1239; }
     .span2 { grid-column: 1 / -1; }
+
+    /* Premium Money Color Button */
+    .btn.moneycolor {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    }
+
+    .btn.moneycolor:hover {
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+      background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+    }
+
     .disclaimer {
       margin-top: 2rem;
       padding: 0.875rem 1rem;
@@ -124,6 +163,7 @@
       color: rgba(253,230,138,0.8);
     }
     .disclaimer strong { color: #fcd34d; }
+
     .footer {
       margin-top: 1rem;
       font-size: 10px;
@@ -144,7 +184,12 @@
 </head>
 <body>
   <div class="card">
-    <div class="logo">📺</div>
+    
+    <!-- Logo နေရာတွင် မိမိ Logo URL ပြောင်းထည့်ရန် (ပုံမရှိလျှင် 📺 ပေါ်ပါမည်) -->
+    <div class="logo">
+      <img src="logo.png?text=BFA" alt="BFA STREAM Logo" onerror="this.outerHTML='📺';">
+    </div>
+
     <h1>BFA STREAM <span>TV/MOB</span></h1>
     <p class="sub">အောက်ပါ Admin အကောင့်များ<br />follow ပေးထားကြပါ</p>
     <div class="badge"><span class="dot"></span> Facebook Approved • Safe Links</div>
@@ -155,11 +200,14 @@
         <div class="btn-inner"><div class="icon">📦</div><span class="label">Apk ဒေါင်းရန်</span></div>
         <span>›</span>
       </a>
-<a class="btn moneycolor" href="https://www.youtube.com/@fotlivemovie" target="_blank" rel="noopener noreferrer">
-        <div class="btn-inner"><div class="icon">💲</div><span class="label">Premium ဈေးနုန်း</span></div>
+
+      <!-- Premium Pricing -->
+      <a class="btn moneycolor" href="activation.html" target="_blank" rel="noopener noreferrer">
+        <div class="btn-inner"><div class="icon">💲</div><span class="label">Premium ဈေးနှုန်း</span></div>
         <span>›</span>
       </a>
-      <!-- 2 Phone bill lottery (NEW - under Apk) -->
+
+      <!-- 2 Phone bill lottery -->
       <a class="btn gold" href="https://lucky-wheel-mm.vercel.app/" target="_blank" rel="noopener noreferrer">
         <div class="btn-inner"><div class="icon">📱</div><span class="label">ဖုန်းဘေကံစမ်းရန်</span></div>
         <span>›</span>
@@ -177,17 +225,11 @@
         <span>›</span>
       </a>
 
-      <!-- 5 Adults (NEW) -->
+      <!-- 5 Adults -->
       <a class="btn adult" href="https://bfa-adults-tv.vercel.app/" target="_blank" rel="noopener noreferrer">
         <div class="btn-inner"><div class="icon">🔞</div><span class="label">🔞 Adults Website</span></div>
         <span>›</span>
       </a>
-
-      <!-- YouTube BFA STREAM only (Dhamma removed) 
-      <a class="btn red" href="https://www.youtube.com/@fotlivemovie" target="_blank" rel="noopener noreferrer">
-        <div class="btn-inner"><div class="icon">▶️</div><span class="label">BFA STREAM</span></div>
-        <span>›</span>
-      </a>-->
 
       <!-- Facebook -->
       <a class="btn blue" href="https://www.facebook.com/profile.php?id=61579748833767" target="_blank" rel="noopener noreferrer">
@@ -202,26 +244,12 @@
         <div class="btn-inner"><div class="icon">f</div><span class="label">BFA STREAM-2</span></div>
         <span>›</span>
       </a>
-     <!-- <a class="btn blue" href="https://www.facebook.com/profile.php?id=61579068101439" target="_blank" rel="noopener noreferrer">
-        <div class="btn-inner"><div class="icon">f</div><span class="label">BFA PREMIUM COLLECTION</span></div>
-        <span>›</span>
-      </a>-->
 
       <!-- Telegram -->
       <a class="btn tg" href="https://t.me/BFASTREAMDownloader" target="_blank" rel="noopener noreferrer">
         <div class="btn-inner"><div class="icon">✈️</div><span class="label">BFA Telegram Bot</span></div>
         <span>›</span>
       </a>
-
-      <!-- TikTok --
-      <a class="btn black" href="https://www.tiktok.com/@fightsport_myanmar" target="_blank" rel="noopener noreferrer">
-        <div class="btn-inner"><div class="icon">♪</div><span class="label">Warrior Ring</span></div>
-        <span>›</span>
-      </a>
-      <a class="btn black" href="https://www.tiktok.com/@fotlivemovies" target="_blank" rel="noopener noreferrer">
-        <div class="btn-inner"><div class="icon">♪</div><span class="label">BFA STREAM</span></div>
-        <span>›</span>
-      </a>-->
 
       <!-- VPN / Hiddify -->
       <a class="btn purple span2" href="Vpnkey.html">
@@ -241,6 +269,9 @@
       <small>© <span id="y"></span> BFA STREAM • All rights reserved • FB Approved Page</small>
     </div>
   </div>
-  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
