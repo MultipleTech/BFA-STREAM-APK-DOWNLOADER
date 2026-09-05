@@ -1,0 +1,39 @@
+name: Replace Old Gateway Links
+
+on:
+  workflow_dispatch:
+
+jobs:
+  replace-urls:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Find and replace URLs
+        run: |
+          find . -type f -not -path '*/.*' -exec sed -i \
+            -e 's|https://movies-data-movie-mm-kappa.vercel.app/|https://vercel-gate-fspnhneg.manus.space/gateway/movies-data|g' \
+            -e 's|https://movies-data-movie-mm-kappa.vercel.app|https://vercel-gate-fspnhneg.manus.space/gateway/movies-data|g' \
+            -e 's|https://fotmo-vtvbox.vercel.app|https://vercel-gate-fspnhneg.manus.space/gateway/vtvbox|g' \
+            -e 's|https://nanomovies-five.vercel.app|https://vercel-gate-fspnhneg.manus.space/gateway/nanomovies|g' \
+            -e 's|https://bfa-next-api.vercel.app|https://vercel-gate-fspnhneg.manus.space/gateway/bfa-api|g' \
+            -e 's|https://fotmo-vmobile.vercel.app|https://vercel-gate-fspnhneg.manus.space/gateway/vmobile|g' \
+            -e 's|https://nextjs-mobile-one.vercel.app|https://vercel-gate-fspnhneg.manus.space/gateway/mobile-one|g' \
+            -e 's|https://nextjs-tv-one.vercel.app|https://vercel-gate-fspnhneg.manus.space/gateway/tv-one|g' \
+            -e 's|https://bfa-stream-apk-downloader.vercel.app/|https://vercel-gate-fspnhneg.manus.space/gateway/apk-downloader|g' \
+            -e 's|https://bfa-stream-apk-downloader.vercel.app|https://vercel-gate-fspnhneg.manus.space/gateway/apk-downloader|g' \
+            -e 's|https://vercel-gate-fspnhneg.manus.space/gateway/bamarthan-one|https://bamarthan-one.vercel.app/|g' \
+            -e 's|https://bamarthan.vercel.app/|https://vercel-gate-fspnhneg.manus.space/gateway/bamarthan|g' \
+            -e 's|https://bamarthan.vercel.app|https://vercel-gate-fspnhneg.manus.space/gateway/bamarthan|g' \
+            -e 's|https://myanmar-future-ai.vercel.app/|https://vercel-gate-fspnhneg.manus.space/studio|g' \
+            -e 's|https://myanmar-future-ai.vercel.app|https://vercel-gate-fspnhneg.manus.space/studio|g' {} +
+
+      - name: Commit and Push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update gateway links including new additions"
+          
