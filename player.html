@@ -17,59 +17,68 @@
             overflow: hidden;
         }
 
-        /* Player Container & Background Image Styling */
-        .artplayer-app {
+        /* Outer Box: ဖုန်းမျက်နှာပြင်အလယ်တွင် ဗီဒီယိုကို လှပစွာ နေရာချပေးမည် */
+        .player-container {
             width: 100vw;
             height: 100vh;
-            /* မိမိနှစ်သက်ရာ Player Background Image URL ကို အောက်ပါနေရာတွင် ထည့်ပါ */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Player Box: Video ရဲ့ Aspect Ratio (16:9) အတိုင်း ကွက်တိဖြစ်စေရန် ချိန်ထားပါသည် */
+        .artplayer-app {
+            width: 100%;
+            max-width: 100%;
+            aspect-ratio: 16 / 9; /* ဗီဒီယို ဘောင်အတိုင်း ကွက်တိဖြစ်စေပါသည် */
+            max-height: 100vh;
+            position: relative;
             background-image: url('YOUR_IMAGE_URL_HERE');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
         }
 
-        /* ညာဘက်အပေါ်ဒေါင့် Text/Logo Styling */
+        /* ညာဘက်အပေါ်ဒေါင့် Logo (BFA STREAM TV) */
         .player-logo {
             color: #ffffff;
             font-family: sans-serif;
-            font-size: 16px;
+            font-size: 13px;
             font-weight: bold;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 6px 12px;
-            border-radius: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
-            letter-spacing: 1px;
+            background: rgba(0, 0, 0, 0.65);
+            padding: 4px 10px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            letter-spacing: 0.5px;
         }
 
-        /* Marquee Container Styling */
+        /* Marquee Box (ဗီဒီယို၏ အောက်ခြေတွင် ကွက်တိကပ်နေမည်) */
         .marquee-box {
             width: 100%;
             overflow: hidden;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 4px 0;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 3px 0;
         }
 
-        /* Running Text Styling (ဘယ်/ညာ အလှည့်ကျပြေးမည့်စနစ်) */
+        /* Running Text (ဘယ် <-> ညာ အလှည့်ကျပြေးမည့် စာတန်း) */
         .marquee-text {
             display: inline-block;
             white-space: nowrap;
             color: #00ffcc;
             font-family: sans-serif;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
-            
-            /* 'alternate' ကြောင့် ဘယ်မှညာ၊ ညာမှဘယ် တည်ငြိမ်စွာ အလှည့်ကျပြေးပါမည် */
+            /* ဘယ် မှ ညာ ၊ ညာ မှ ဘယ် အလှည့်ကျ ပြေးပါမည် */
             animation: marquee-bounce 10s linear infinite alternate;
         }
 
-        /* ဘယ် <-> ညာ အလှည့်ကျပြေးရန် Keyframes */
         @keyframes marquee-bounce {
             0% {
-                transform: translateX(-100%); /* ဘယ်ဘက်အပြင်မှ စမည် */
+                transform: translateX(-100%);
             }
             100% {
-                transform: translateX(100vw); /* ညာဘက်အပြင်သို့ ရောက်လျှင် ဘယ်ဘက်သို့ ပြန်လှည့်မည် */
+                transform: translateX(100%);
             }
         }
     </style>
@@ -80,7 +89,9 @@
 </head>
 <body>
 
-    <div class="artplayer-app"></div>
+    <div class="player-container">
+        <div class="artplayer-app"></div>
+    </div>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
@@ -101,24 +112,24 @@
                 fullscreen: true,
                 fullscreenWeb: true,
                 layers: [
-                    // ညာဘက်အပေါ်ဒေါင့် Logo (BFA STREAM TV)
+                    // ဗီဒီယို ဘောင်၏ ညာဘက်အပေါ်ဒေါင့်တွင် ကွက်တိ ပေါ်မည့် Logo
                     {
                         name: 'topRightLogo',
                         html: '<div class="player-logo">BFA STREAM TV</div>',
                         style: {
                             position: 'absolute',
-                            top: '15px',
-                            right: '20px',
+                            top: '10px',
+                            right: '10px',
                             zIndex: 10,
                         },
                     },
-                    // အောက်ခြေ ဘယ်/ညာ အလှည့်ကျပြေးမည့် Marquee စာတန်း
+                    // ဗီဒီယို ဘောင်၏ အောက်ခြေကွက်တိတွင် ပေါ်မည့် Marquee စာတန်း
                     {
                         name: 'bottomMarquee',
                         html: '<div class="marquee-box"><div class="marquee-text">Burmar Future Ai Apk Creation</div></div>',
                         style: {
                             position: 'absolute',
-                            bottom: '50px',
+                            bottom: '0px', // ဗီဒီယိုအောက်ခြေ ကွက်တိ
                             left: '0',
                             width: '100%',
                             zIndex: 10,
