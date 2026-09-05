@@ -16,12 +16,64 @@
             align-items: center;
             overflow: hidden;
         }
+
+        /* Player Container & Background Image Styling */
         .artplayer-app {
             width: 100vw;
             height: 100vh;
+            /* မိမိနှစ်သက်ရာ Player Background Image URL ကို အောက်ပါနေရာတွင် ထည့်ပါ */
+            background-image: url('YOUR_IMAGE_URL_HERE');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* ညာဘက်အပေါ်ဒေါင့် Text/Logo Styling */
+        .player-logo {
+            color: #ffffff;
+            font-family: sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+            letter-spacing: 1px;
+        }
+
+        /* Marquee Container Styling */
+        .marquee-box {
+            width: 100%;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 4px 0;
+        }
+
+        /* Running Text Styling (ဘယ်/ညာ အလှည့်ကျပြေးမည့်စနစ်) */
+        .marquee-text {
+            display: inline-block;
+            white-space: nowrap;
+            color: #00ffcc;
+            font-family: sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            
+            /* 'alternate' ကြောင့် ဘယ်မှညာ၊ ညာမှဘယ် တည်ငြိမ်စွာ အလှည့်ကျပြေးပါမည် */
+            animation: marquee-bounce 10s linear infinite alternate;
+        }
+
+        /* ဘယ် <-> ညာ အလှည့်ကျပြေးရန် Keyframes */
+        @keyframes marquee-bounce {
+            0% {
+                transform: translateX(-100%); /* ဘယ်ဘက်အပြင်မှ စမည် */
+            }
+            100% {
+                transform: translateX(100vw); /* ညာဘက်အပြင်သို့ ရောက်လျှင် ဘယ်ဘက်သို့ ပြန်လှည့်မည် */
+            }
         }
     </style>
-    <!-- .m3u8 (HLS) stream ဖတ်နိုင်ရန် hls.js ကို သုံးပါမည် -->
+    <!-- .m3u8 (HLS) stream ဖတ်နိုင်ရန် hls.js -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <!-- Artplayer Library -->
     <script src="https://cdn.jsdelivr.net/npm/artplayer/dist/artplayer.js"></script>
@@ -48,6 +100,32 @@
                 setting: true,
                 fullscreen: true,
                 fullscreenWeb: true,
+                layers: [
+                    // ညာဘက်အပေါ်ဒေါင့် Logo (BFA STREAM TV)
+                    {
+                        name: 'topRightLogo',
+                        html: '<div class="player-logo">BFA STREAM TV</div>',
+                        style: {
+                            position: 'absolute',
+                            top: '15px',
+                            right: '20px',
+                            zIndex: 10,
+                        },
+                    },
+                    // အောက်ခြေ ဘယ်/ညာ အလှည့်ကျပြေးမည့် Marquee စာတန်း
+                    {
+                        name: 'bottomMarquee',
+                        html: '<div class="marquee-box"><div class="marquee-text">Burmar Future Ai Apk Creation</div></div>',
+                        style: {
+                            position: 'absolute',
+                            bottom: '50px',
+                            left: '0',
+                            width: '100%',
+                            zIndex: 10,
+                            pointerEvents: 'none',
+                        },
+                    }
+                ],
                 customType: {
                     m3u8: function (video, url, art) {
                         if (Hls.isSupported()) {
