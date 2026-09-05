@@ -30,7 +30,7 @@
         .artplayer-app {
             width: 100%;
             max-width: 100%;
-            aspect-ratio: 16 / 9; /* ဗီဒီယို ဘောင်အတိုင်း ကွက်တိဖြစ်စေပါသည် */
+            aspect-ratio: 16 / 9;
             max-height: 100vh;
             position: relative;
             background-image: url('YOUR_IMAGE_URL_HERE');
@@ -82,8 +82,13 @@
             }
         }
     </style>
-    <!-- .m3u8 (HLS) stream ဖတ်နိုင်ရန် hls.js -->
+
+    <!-- .m3u8 (HLS) Stream ဖတ်ရန် HLS Library -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    
+    <!-- .flv Stream ဖတ်ရန် FLV Library -->
+    <script src="https://cdn.jsdelivr.net/npm/flv.js@latest/dist/flv.min.js"></script>
+
     <!-- Artplayer Library -->
     <script src="https://cdn.jsdelivr.net/npm/artplayer/dist/artplayer.js"></script>
 </head>
@@ -100,10 +105,18 @@
         if (!videoUrl) {
             document.body.innerHTML = '<h3 style="color: #fff; font-family: sans-serif; text-align: center;">Video URL မတွေ့ရှိပါ။ URL parameter တွင် ?videoUrl= ထည့်သွင်းပေးပါ။</h3>';
         } else {
+            // URL ပေါ်မူတည်၍ .flv သို့မဟုတ် .m3u8 ကို အလိုအလျောက် စစ်ဆေးခြင်း
+            let streamType = 'm3u8'; // Default
+            if (videoUrl.toLowerCase().includes('.flv')) {
+                streamType = 'flv';
+            } else if (videoUrl.toLowerCase().includes('.m3u8')) {
+                streamType = 'm3u8';
+            }
+
             const art = new Artplayer({
                 container: '.artplayer-app',
                 url: videoUrl,
-                type: 'm3u8',
+                type: streamType,
                 isLive: true,
                 autoplay: true,
                 pip: true,
@@ -112,7 +125,7 @@
                 fullscreen: true,
                 fullscreenWeb: true,
                 layers: [
-                    // ဗီဒီယို ဘောင်၏ ညာဘက်အပေါ်ဒေါင့်တွင် ကွက်တိ ပေါ်မည့် Logo
+                    // ညာဘက်အပေါ်ဒေါင့် Logo (BFA STREAM TV)
                     {
                         name: 'topRightLogo',
                         html: '<div class="player-logo">BFA STREAM TV</div>',
@@ -123,13 +136,13 @@
                             zIndex: 10,
                         },
                     },
-                    // ဗီဒီယို ဘောင်၏ အောက်ခြေကွက်တိတွင် ပေါ်မည့် Marquee စာတန်း
+                    // အောက်ခြေ ဘယ်/ညာ အလှည့်ကျပြေးမည့် Marquee စာတန်း
                     {
                         name: 'bottomMarquee',
                         html: '<div class="marquee-box"><div class="marquee-text">Burmar Future Ai Apk Creation</div></div>',
                         style: {
                             position: 'absolute',
-                            bottom: '0px', // ဗီဒီယိုအောက်ခြေ ကွက်တိ
+                            bottom: '0px',
                             left: '0',
                             width: '100%',
                             zIndex: 10,
@@ -138,6 +151,7 @@
                     }
                 ],
                 customType: {
+                    // HLS (.m3u8) Support
                     m3u8: function (video, url, art) {
                         if (Hls.isSupported()) {
                             if (art.hls) art.hls.destroy();
@@ -155,6 +169,29 @@
                             art.notice.show = 'သင့် Browser တွင် HLS Playback မပံ့ပိုးပါ။';
                         }
                     },
+                    // FLV (.flv) Support
+                    flv: function (video, url, art) {
+                        if (flvjs.isSupported()) {
+                            if (art.flv) art.flv.destroy();
+                            const flvPlayer = flvjs.createPlayer({
+                                type: 'flv',
+                                url: url,
+                                isLive: true,
+                            }, {
+                                cors: true,
+                                enableStashBuffer: false, // Live stream တွင် delay နည်းစေရန်
+                            });
+                            flvPlayer.attachMediaElement(video);
+                            flvPlayer.load();
+                            art.flv = flvPlayer;
+
+                            art.on('destroy', () => {
+                                flvPlayer.destroy();
+                            });
+                        } else {
+                            art.notice.show = 'သင့် Browser တွင် FLV Playback မပံ့ပိုးပါ။';
+                        }
+                    }
                 },
             });
         }
