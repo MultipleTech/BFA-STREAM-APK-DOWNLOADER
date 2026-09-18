@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Referer Block ကျော်ရန် no-referrer ထည့်သွင်းထားသည် -->
+    <meta name="referrer" content="no-referrer">
     <title>Artplayer Stream for Android TV</title>
     <style>
         html, body {
@@ -94,32 +96,41 @@
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
-        const videoUrl = urlParams.get('videoUrl');
+        let rawVideoUrl = urlParams.get('videoUrl');
 
-        if (!videoUrl) {
+        if (!rawVideoUrl) {
             document.body.innerHTML = '<h3 style="color: #fff; font-family: sans-serif; text-align: center;">Video URL မတွေ့ရှိပါ။ URL parameter တွင် ?videoUrl= ထည့်သွင်းပေးပါ။</h3>';
         } else {
-            let streamType = 'm3u8';
-            if (videoUrl.toLowerCase().includes('.flv')) {
+            // URL decode ပြုလုပ်ခြင်း နှင့် Pipe (|Referer) ပါလာပါက ဖျောက်ခြင်း
+            let videoUrl = decodeURIComponent(rawVideoUrl).split('|')[0].trim();
+            let titleParam = urlParams.get('title') ? decodeURIComponent(urlParams.get('title')) : 'BFA STREAM TV';
+
+            // Video Format ခွဲခြားခြင်း (MP4, M3U8, FLV)
+            let streamType = 'mp4'; 
+            const cleanCheckUrl = videoUrl.split('?')[0].toLowerCase();
+            
+            if (cleanCheckUrl.endsWith('.flv') || cleanCheckUrl.includes('.flv')) {
                 streamType = 'flv';
-            } else if (videoUrl.toLowerCase().includes('.m3u8')) {
+            } else if (cleanCheckUrl.endsWith('.m3u8') || cleanCheckUrl.includes('.m3u8')) {
                 streamType = 'm3u8';
+            } else if (cleanCheckUrl.endsWith('.mp4') || cleanCheckUrl.includes('.mp4')) {
+                streamType = 'mp4';
             }
 
-            const art = new Artplayer({
+            const artConfig = {
                 container: '#artplayer',
                 url: videoUrl,
                 type: streamType,
-                isLive: true,
+                isLive: streamType === 'flv' || streamType === 'm3u8',
                 autoplay: true,
-                muted: true, // Android TV WebView Autoplay Restriction ကျော်ရန် Muted စဖွင့်ပါသည်
-                hotkey: true, // Remote Key bindings များ ဖွင့်ထားခြင်း
+                muted: true, // Android TV Autoplay ရစေရန်
+                hotkey: true,
                 fullscreen: true,
                 fullscreenWeb: true,
                 layers: [
                     {
                         name: 'topRightLogo',
-                        html: '<div class="player-logo">BFA STREAM TV</div>',
+                        html: `<div class="player-logo">${titleParam}</div>`,
                         style: {
                             position: 'absolute',
                             top: '15px',
@@ -129,7 +140,7 @@
                     },
                     {
                         name: 'bottomMarquee',
-                        html: '<div class="marquee-box"><div class="marquee-text">Burmar Future Ai Apk Creation</div></div>',
+                        html: '<div class="marquee-box"><div class="marquee-text">Burmar Future Ai Stream</div></div>',
                         style: {
                             position: 'absolute',
                             bottom: '0px',
@@ -140,68 +151,71 @@
                         },
                     }
                 ],
-                customType: {
-                    m3u8: function (video, url, art) {
-                        if (Hls.isSupported()) {
-                            if (art.hls) art.hls.destroy();
-                            const hls = new Hls({
-                                maxBufferLength: 10, // Buffer storage လျှော့ချပြီး Android TV RAM သက်သာစေရန်
-                                liveSyncDuration: 3,
-                            });
-                            hls.loadSource(url);
-                            hls.attachMedia(video);
-                            art.hls = hls;
+                customType: {}
+            };
 
-                            art.on('destroy', () => hls.destroy());
-                        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                            video.src = url;
-                        }
-                    },
-                    flv: function (video, url, art) {
-                        if (flvjs.isSupported()) {
-                            if (art.flv) art.flv.destroy();
-                            const flvPlayer = flvjs.createPlayer({
-                                type: 'flv',
-                                url: url,
-                                isLive: true,
-                            }, {
-                                cors: true,
-                                enableStashBuffer: false,
-                                lazyLoad: false,
-                            });
-                            flvPlayer.attachMediaElement(video);
-                            flvPlayer.load();
-                            art.flv = flvPlayer;
-
-                            art.on('destroy', () => flvPlayer.destroy());
-                        }
+            // Custom Loader များ (HLS / FLV အတွက်သာ သီးသန့်ထည့်ရန်)
+            if (streamType === 'm3u8') {
+                artConfig.customType.m3u8 = function (video, url, art) {
+                    if (Hls.isSupported()) {
+                        if (art.hls) art.hls.destroy();
+                        const hls = new Hls({
+                            maxBufferLength: 10,
+                            liveSyncDuration: 3,
+                        });
+                        hls.loadSource(url);
+                        hls.attachMedia(video);
+                        art.hls = hls;
+                        art.on('destroy', () => hls.destroy());
+                    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                        video.src = url;
                     }
-                },
-            });
+                };
+            } else if (streamType === 'flv') {
+                artConfig.customType.flv = function (video, url, art) {
+                    if (flvjs.isSupported()) {
+                        if (art.flv) art.flv.destroy();
+                        const flvPlayer = flvjs.createPlayer({
+                            type: 'flv',
+                            url: url,
+                            isLive: true,
+                        }, {
+                            cors: true,
+                            enableStashBuffer: false,
+                            lazyLoad: false,
+                        });
+                        flvPlayer.attachMediaElement(video);
+                        flvPlayer.load();
+                        art.flv = flvPlayer;
+                        art.on('destroy', () => flvPlayer.destroy());
+                    }
+                };
+            }
 
-            // Video စဖွင့်သည်နှင့် Unmute လုပ်ပေးခြင်း
+            const art = new Artplayer(artConfig);
+
+            // Video စဖွင့်သည်နှင့် Unmute ပြုလုပ်ခြင်း
             art.on('ready', () => {
                 art.focus = true;
                 const playerEl = document.getElementById('artplayer');
                 if (playerEl) playerEl.focus();
 
-                // Autoplay ပွင့်သွားပါက မကြာမီ အသံပြန်ဖွင့်ရန်
                 art.play().then(() => {
                     setTimeout(() => { art.muted = false; }, 500);
                 }).catch(() => {});
             });
 
-            // Android TV Remote Control (D-Pad) Key Mapping
+            // Android TV Remote Control Key Bindings
             document.addEventListener('keydown', (e) => {
                 switch (e.keyCode) {
                     case 13: // OK / Center Button
                     case 32: // Space bar
                         art.toggle();
                         break;
-                    case 37: // Left Arrow (Rewind 10 seconds)
+                    case 37: // Left Arrow (Rewind 10s)
                         if (!art.isLive) art.seek = Math.max(0, art.currentTime - 10);
                         break;
-                    case 39: // Right Arrow (Fast Forward 10 seconds)
+                    case 39: // Right Arrow (Fast Forward 10s)
                         if (!art.isLive) art.seek = Math.min(art.duration, art.currentTime + 10);
                         break;
                     case 38: // Up Arrow (Volume Up)
