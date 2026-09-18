@@ -1,1 +1,203 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Referer Block ကျော်ရန် -->
+    <meta name="referrer" content="no-referrer">
+    <title>Video.js Stream for Android TV</title>
+
+    <!-- Video.js Standard CSS -->
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .player-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            background: #000;
+        }
+
+        /* TV Box WebView Black Screen Fix - Background Transparent သတ်မှတ်ခြင်း */
+        .video-js, 
+        .vjs-tech, 
+        video {
+            width: 100vw !important;
+            height: 100vh !important;
+            background: transparent !important;
+            background-color: transparent !important;
+            object-fit: contain !important;
+        }
+
+        /* Controls Bar UI ကို TV နဲ့ ကိုက်ညီအောင် ပြင်ဆင်ခြင်း */
+        .vjs-control-bar {
+            background: rgba(0, 0, 0, 0.6) !important;
+            font-size: 14px;
+        }
+
+        /* ညာဘက်အပေါ်ဒေါင့် Logo Overlay */
+        .player-logo {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 10;
+            color: #ffffff;
+            font-family: sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            letter-spacing: 0.5px;
+            pointer-events: none;
+        }
+
+        /* Marquee Box Overlay */
+        .marquee-box {
+            position: absolute;
+            bottom: 0px;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.65);
+            padding: 4px 0;
+            pointer-events: none;
+        }
+
+        .marquee-text {
+            display: inline-block;
+            white-space: nowrap;
+            color: #00ffcc;
+            font-family: sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            will-change: transform;
+            animation: marquee-bounce 12s linear infinite alternate;
+        }
+
+        @keyframes marquee-bounce {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+    </style>
+
+    <!-- Video.js Standard Library (Built-in VHS support for m3u8/HLS & MP4) -->
+    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+</head>
+<body>
+
+    <div class="player-container">
+        <!-- Overlay Layers -->
+        <div id="player-logo" class="player-logo">BFA STREAM TV</div>
+        
+        <div class="marquee-box">
+            <div class="marquee-text">Burmar Future Ai Stream</div>
+        </div>
+
+        <!-- Video Element -->
+        <video 
+            id="tv-player" 
+            class="video-js vjs-default-skin vjs-big-play-centered" 
+            controls 
+            playsinline 
+            webkit-playsinline 
+            preload="auto"
+            tabindex="0">
+        </video>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        let rawVideoUrl = urlParams.get('videoUrl');
+
+        if (!rawVideoUrl) {
+            document.body.innerHTML = '<h3 style="color: #fff; font-family: sans-serif; text-align: center;">Video URL မတွေ့ရှိပါ။ URL parameter တွင် ?videoUrl= ထည့်သွင်းပေးပါ။</h3>';
+        } else {
+            // URL decode ပြုလုပ်ခြင်း နှင့် Pipe (|Referer) ဖျောက်ခြင်း
+            let videoUrl = decodeURIComponent(rawVideoUrl).split('|')[0].trim();
+            let titleParam = urlParams.get('title') ? decodeURIComponent(urlParams.get('title')) : 'BFA STREAM TV';
+
+            document.getElementById('player-logo').innerText = titleParam;
+
+            // Stream Type (MIME Type) ခွဲခြားခြင်း
+            let mimeType = 'video/mp4'; 
+            const cleanCheckUrl = videoUrl.split('?')[0].toLowerCase();
+            
+            if (cleanCheckUrl.endsWith('.m3u8') || cleanCheckUrl.includes('.m3u8')) {
+                mimeType = 'application/x-mpegURL';
+            } else if (cleanCheckUrl.endsWith('.flv') || cleanCheckUrl.includes('.flv')) {
+                mimeType = 'video/x-flv';
+            }
+
+            // Video.js Player Initialize ပြုလုပ်ခြင်း
+            const player = videojs('tv-player', {
+                autoplay: 'any', // Autoplay မရပါက Muted ဖြင့် Auto စတင်မည်
+                muted: true,
+                controls: true,
+                fluid: false,
+                sources: [{
+                    src: videoUrl,
+                    type: mimeType
+                }]
+            });
+
+            player.ready(() => {
+                // Background transparent ပြန်လည်ချိန်ညှိခြင်း
+                const tech = player.tech({ IWillNotUseThisInPlugins: true });
+                if (tech && tech.el_) {
+                    tech.el_.style.backgroundColor = 'transparent';
+                }
+
+                // Autoplay ပွင့်သည်နှင့် Unmute ပြုလုပ်ခြင်း
+                player.play().then(() => {
+                    setTimeout(() => { player.muted(false); }, 500);
+                }).catch(() => {});
+            });
+
+            // TV Remote Control Key Bindings (D-Pad)
+            document.addEventListener('keydown', (e) => {
+                if (!player) return;
+
+                switch (e.keyCode) {
+                    case 13: // OK / Center
+                    case 32: // Spacebar
+                        if (player.paused()) {
+                            player.play();
+                        } else {
+                            player.pause();
+                        }
+                        break;
+                    case 37: // Left Arrow (Rewind 10s)
+                        player.currentTime(Math.max(0, player.currentTime() - 10));
+                        break;
+                    case 39: // Right Arrow (Fast Forward 10s)
+                        player.currentTime(Math.min(player.duration(), player.currentTime() + 10));
+                        break;
+                    case 38: // Up Arrow (Volume +10%)
+                        player.volume(Math.min(1, player.volume() + 0.1));
+                        break;
+                    case 40: // Down Arrow (Volume -10%)
+                        player.volume(Math.max(0, player.volume() - 0.1));
+                        break;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
 
