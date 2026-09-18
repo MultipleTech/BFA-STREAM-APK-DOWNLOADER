@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Referer Block ကျော်ရန် no-referrer -->
+    <!-- Referer Block ကျော်ရန် no-referrer ထည့်သွင်းထားသည် -->
     <meta name="referrer" content="no-referrer">
     <title>Artplayer Stream for Android TV</title>
     <style>
@@ -19,27 +19,20 @@
             align-items: center;
         }
 
+        /* TV Screen အတွက် Full Viewport အပြည့်ယူခြင်း */
         .player-container {
             width: 100vw;
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #000;
         }
 
-        /* Android TV WebView မှာ Video ရုပ်ပေါ်စေရန် Player Background များကို Transparent ပြုလုပ်ခြင်း */
-        .artplayer-app,
-        #artplayer,
-        .art-video-player,
-        .art-video-player video {
-            width: 100vw !important;
-            height: 100vh !important;
+        .artplayer-app {
+            width: 100vw;
+            height: 100vh;
             position: relative;
-            outline: none;
-            background: transparent !important;
-            background-color: transparent !important;
-            object-fit: contain !important;
+            outline: none; /* Focus border ကို ဖျောက်ရန် */
         }
 
         /* ညာဘက်အပေါ်ဒေါင့် Logo */
@@ -64,6 +57,7 @@
             padding: 4px 0;
         }
 
+        /* Performance Optimized Running Text */
         .marquee-text {
             display: inline-block;
             white-space: nowrap;
@@ -76,8 +70,12 @@
         }
 
         @keyframes marquee-bounce {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
         }
     </style>
 
@@ -103,9 +101,11 @@
         if (!rawVideoUrl) {
             document.body.innerHTML = '<h3 style="color: #fff; font-family: sans-serif; text-align: center;">Video URL မတွေ့ရှိပါ။ URL parameter တွင် ?videoUrl= ထည့်သွင်းပေးပါ။</h3>';
         } else {
+            // URL decode ပြုလုပ်ခြင်း နှင့် Pipe (|Referer) ပါလာပါက ဖျောက်ခြင်း
             let videoUrl = decodeURIComponent(rawVideoUrl).split('|')[0].trim();
             let titleParam = urlParams.get('title') ? decodeURIComponent(urlParams.get('title')) : 'BFA STREAM TV';
 
+            // Video Format ခွဲခြားခြင်း (MP4, M3U8, FLV)
             let streamType = 'mp4'; 
             const cleanCheckUrl = videoUrl.split('?')[0].toLowerCase();
             
@@ -123,7 +123,7 @@
                 type: streamType,
                 isLive: streamType === 'flv' || streamType === 'm3u8',
                 autoplay: true,
-                muted: true,
+                muted: true, // Android TV Autoplay ရစေရန်
                 hotkey: true,
                 fullscreen: true,
                 fullscreenWeb: true,
@@ -154,12 +154,12 @@
                 customType: {}
             };
 
+            // Custom Loader များ (HLS / FLV အတွက်သာ သီးသန့်ထည့်ရန်)
             if (streamType === 'm3u8') {
                 artConfig.customType.m3u8 = function (video, url, art) {
                     if (Hls.isSupported()) {
                         if (art.hls) art.hls.destroy();
                         const hls = new Hls({
-                            enableWorker: false, // TV WebView rendering error မဖြစ်စေရန်
                             maxBufferLength: 10,
                             liveSyncDuration: 3,
                         });
@@ -194,14 +194,8 @@
 
             const art = new Artplayer(artConfig);
 
+            // Video စဖွင့်သည်နှင့် Unmute ပြုလုပ်ခြင်း
             art.on('ready', () => {
-                // TV WebView မှာ Video Render မှန်မှန်ကန်ကန် ပေါ်စေရန် Attributes များ တပ်ဆင်ခြင်း
-                if (art.video) {
-                    art.video.setAttribute('playsinline', 'true');
-                    art.video.setAttribute('webkit-playsinline', 'true');
-                    art.video.style.backgroundColor = 'transparent';
-                }
-
                 art.focus = true;
                 const playerEl = document.getElementById('artplayer');
                 if (playerEl) playerEl.focus();
@@ -211,23 +205,23 @@
                 }).catch(() => {});
             });
 
-            // Remote Controller Key Mapping
+            // Android TV Remote Control Key Bindings
             document.addEventListener('keydown', (e) => {
                 switch (e.keyCode) {
-                    case 13:
-                    case 32:
+                    case 13: // OK / Center Button
+                    case 32: // Space bar
                         art.toggle();
                         break;
-                    case 37:
+                    case 37: // Left Arrow (Rewind 10s)
                         if (!art.isLive) art.seek = Math.max(0, art.currentTime - 10);
                         break;
-                    case 39:
+                    case 39: // Right Arrow (Fast Forward 10s)
                         if (!art.isLive) art.seek = Math.min(art.duration, art.currentTime + 10);
                         break;
-                    case 38:
+                    case 38: // Up Arrow (Volume Up)
                         art.volume = Math.min(1, art.volume + 0.1);
                         break;
-                    case 40:
+                    case 40: // Down Arrow (Volume Down)
                         art.volume = Math.max(0, art.volume - 0.1);
                         break;
                 }
