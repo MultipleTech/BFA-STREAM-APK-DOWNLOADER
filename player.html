@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="my">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artplayer Stream</title>
+    <title>Artplayer Stream for Android TV</title>
     <style>
         html, body {
             width: 100%;
@@ -11,13 +11,13 @@
             margin: 0;
             padding: 0;
             background-color: #000;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
         }
 
-        /* Outer Box: ဖုန်းမျက်နှာပြင်အလယ်တွင် ဗီဒီယိုကို လှပစွာ နေရာချပေးမည် */
+        /* TV Screen အတွက် Full Viewport အပြည့်ယူခြင်း */
         .player-container {
             width: 100vw;
             height: 100vh;
@@ -26,51 +26,45 @@
             align-items: center;
         }
 
-        /* Player Box: Video ရဲ့ Aspect Ratio (16:9) အတိုင်း ကွက်တိဖြစ်စေရန် ချိန်ထားပါသည် */
         .artplayer-app {
-            width: 100%;
-            max-width: 100%;
-            aspect-ratio: 16 / 9;
-            max-height: 100vh;
+            width: 100vw;
+            height: 100vh;
             position: relative;
-            background-image: url('YOUR_IMAGE_URL_HERE');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            outline: none; /* Focus border ကို ဖျောက်ရန် */
         }
 
-        /* ညာဘက်အပေါ်ဒေါင့် Logo (BFA STREAM TV) */
+        /* ညာဘက်အပေါ်ဒေါင့် Logo */
         .player-logo {
             color: #ffffff;
             font-family: sans-serif;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: bold;
-            background: rgba(0, 0, 0, 0.65);
-            padding: 4px 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 6px 12px;
             border-radius: 4px;
             border: 1px solid rgba(255, 255, 255, 0.3);
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
             letter-spacing: 0.5px;
         }
 
-        /* Marquee Box (ဗီဒီယို၏ အောက်ခြေတွင် ကွက်တိကပ်နေမည်) */
+        /* Marquee Box */
         .marquee-box {
             width: 100%;
             overflow: hidden;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 3px 0;
+            background: rgba(0, 0, 0, 0.65);
+            padding: 4px 0;
         }
 
-        /* Running Text (ဘယ် <-> ညာ အလှည့်ကျပြေးမည့် စာတန်း) */
+        /* Performance Optimized Running Text */
         .marquee-text {
             display: inline-block;
             white-space: nowrap;
             color: #00ffcc;
             font-family: sans-serif;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 500;
-            /* ဘယ် မှ ညာ ၊ ညာ မှ ဘယ် အလှည့်ကျ ပြေးပါမည် */
-            animation: marquee-bounce 10s linear infinite alternate;
+            will-change: transform;
+            animation: marquee-bounce 12s linear infinite alternate;
         }
 
         @keyframes marquee-bounce {
@@ -83,10 +77,10 @@
         }
     </style>
 
-    <!-- .m3u8 (HLS) Stream ဖတ်ရန် HLS Library -->
+    <!-- HLS Library -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     
-    <!-- .flv Stream ဖတ်ရန် FLV Library -->
+    <!-- FLV Library -->
     <script src="https://cdn.jsdelivr.net/npm/flv.js@latest/dist/flv.min.js"></script>
 
     <!-- Artplayer Library -->
@@ -95,7 +89,7 @@
 <body>
 
     <div class="player-container">
-        <div class="artplayer-app"></div>
+        <div id="artplayer" class="artplayer-app" tabindex="0"></div>
     </div>
 
     <script>
@@ -105,8 +99,7 @@
         if (!videoUrl) {
             document.body.innerHTML = '<h3 style="color: #fff; font-family: sans-serif; text-align: center;">Video URL မတွေ့ရှိပါ။ URL parameter တွင် ?videoUrl= ထည့်သွင်းပေးပါ။</h3>';
         } else {
-            // URL ပေါ်မူတည်၍ .flv သို့မဟုတ် .m3u8 ကို အလိုအလျောက် စစ်ဆေးခြင်း
-            let streamType = 'm3u8'; // Default
+            let streamType = 'm3u8';
             if (videoUrl.toLowerCase().includes('.flv')) {
                 streamType = 'flv';
             } else if (videoUrl.toLowerCase().includes('.m3u8')) {
@@ -114,29 +107,26 @@
             }
 
             const art = new Artplayer({
-                container: '.artplayer-app',
+                container: '#artplayer',
                 url: videoUrl,
                 type: streamType,
                 isLive: true,
                 autoplay: true,
-                pip: true,
-                screenshot: true,
-                setting: true,
+                muted: true, // Android TV WebView Autoplay Restriction ကျော်ရန် Muted စဖွင့်ပါသည်
+                hotkey: true, // Remote Key bindings များ ဖွင့်ထားခြင်း
                 fullscreen: true,
                 fullscreenWeb: true,
                 layers: [
-                    // ညာဘက်အပေါ်ဒေါင့် Logo (BFA STREAM TV)
                     {
                         name: 'topRightLogo',
                         html: '<div class="player-logo">BFA STREAM TV</div>',
                         style: {
                             position: 'absolute',
-                            top: '10px',
-                            right: '10px',
+                            top: '15px',
+                            right: '15px',
                             zIndex: 10,
                         },
                     },
-                    // အောက်ခြေ ဘယ်/ညာ အလှည့်ကျပြေးမည့် Marquee စာတန်း
                     {
                         name: 'bottomMarquee',
                         html: '<div class="marquee-box"><div class="marquee-text">Burmar Future Ai Apk Creation</div></div>',
@@ -151,25 +141,22 @@
                     }
                 ],
                 customType: {
-                    // HLS (.m3u8) Support
                     m3u8: function (video, url, art) {
                         if (Hls.isSupported()) {
                             if (art.hls) art.hls.destroy();
-                            const hls = new Hls();
+                            const hls = new Hls({
+                                maxBufferLength: 10, // Buffer storage လျှော့ချပြီး Android TV RAM သက်သာစေရန်
+                                liveSyncDuration: 3,
+                            });
                             hls.loadSource(url);
                             hls.attachMedia(video);
                             art.hls = hls;
 
-                            art.on('destroy', () => {
-                                hls.destroy();
-                            });
+                            art.on('destroy', () => hls.destroy());
                         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
                             video.src = url;
-                        } else {
-                            art.notice.show = 'သင့် Browser တွင် HLS Playback မပံ့ပိုးပါ။';
                         }
                     },
-                    // FLV (.flv) Support
                     flv: function (video, url, art) {
                         if (flvjs.isSupported()) {
                             if (art.flv) art.flv.destroy();
@@ -179,20 +166,51 @@
                                 isLive: true,
                             }, {
                                 cors: true,
-                                enableStashBuffer: false, // Live stream တွင် delay နည်းစေရန်
+                                enableStashBuffer: false,
+                                lazyLoad: false,
                             });
                             flvPlayer.attachMediaElement(video);
                             flvPlayer.load();
                             art.flv = flvPlayer;
 
-                            art.on('destroy', () => {
-                                flvPlayer.destroy();
-                            });
-                        } else {
-                            art.notice.show = 'သင့် Browser တွင် FLV Playback မပံ့ပိုးပါ။';
+                            art.on('destroy', () => flvPlayer.destroy());
                         }
                     }
                 },
+            });
+
+            // Video စဖွင့်သည်နှင့် Unmute လုပ်ပေးခြင်း
+            art.on('ready', () => {
+                art.focus = true;
+                const playerEl = document.getElementById('artplayer');
+                if (playerEl) playerEl.focus();
+
+                // Autoplay ပွင့်သွားပါက မကြာမီ အသံပြန်ဖွင့်ရန်
+                art.play().then(() => {
+                    setTimeout(() => { art.muted = false; }, 500);
+                }).catch(() => {});
+            });
+
+            // Android TV Remote Control (D-Pad) Key Mapping
+            document.addEventListener('keydown', (e) => {
+                switch (e.keyCode) {
+                    case 13: // OK / Center Button
+                    case 32: // Space bar
+                        art.toggle();
+                        break;
+                    case 37: // Left Arrow (Rewind 10 seconds)
+                        if (!art.isLive) art.seek = Math.max(0, art.currentTime - 10);
+                        break;
+                    case 39: // Right Arrow (Fast Forward 10 seconds)
+                        if (!art.isLive) art.seek = Math.min(art.duration, art.currentTime + 10);
+                        break;
+                    case 38: // Up Arrow (Volume Up)
+                        art.volume = Math.min(1, art.volume + 0.1);
+                        break;
+                    case 40: // Down Arrow (Volume Down)
+                        art.volume = Math.max(0, art.volume - 0.1);
+                        break;
+                }
             });
         }
     </script>
