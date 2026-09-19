@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Referer Block ကျော်ရန် -->
     <meta name="referrer" content="no-referrer">
     <title>Clappr Player for Android TV</title>
 
@@ -27,7 +26,6 @@
             background: #000;
         }
 
-        /* TV Box WebView Black Screen Fix - Background Transparent သတ်မှတ်ခြင်း */
         #player,
         [data-player],
         .container[data-container],
@@ -39,7 +37,7 @@
             object-fit: contain !important;
         }
 
-        /* Marquee Box Overlay (အပေါ်ဆုံးသို့ ပြောင်းထားသည်) */
+        /* Marquee Box Overlay (အပေါ်ဆုံး) */
         .marquee-box {
             position: absolute;
             top: 0px;
@@ -68,7 +66,7 @@
             100% { transform: translateX(100%); }
         }
 
-        /* ညာဘက်အပေါ်ဒေါင့် Logo Overlay (Marquee Box အောက်သို့ အနည်းငယ် ရွှေ့ပေးထားသည်) */
+        /* ညာဘက်အပေါ်ဒေါင့် Logo Overlay */
         .player-logo {
             position: absolute;
             top: 35px;
@@ -88,21 +86,17 @@
         }
     </style>
 
-    <!-- Clappr Core Library -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.min.js"></script>
 </head>
 <body>
 
     <div class="player-container">
-        <!-- Marquee Box Overlay (အပေါ်ဘက်) -->
         <div class="marquee-box">
             <div class="marquee-text">Burmar Future Ai Stream</div>
         </div>
 
-        <!-- ညာဘက်အပေါ်ဒေါင့် Logo Overlay -->
         <div id="player-logo" class="player-logo">BFA STREAM TV</div>
 
-        <!-- Clappr Player Container -->
         <div id="player"></div>
     </div>
 
@@ -111,63 +105,79 @@
         let rawVideoUrl = urlParams.get('videoUrl');
 
         if (!rawVideoUrl) {
-            document.body.innerHTML = '<h3 style="color: #fff; font-family: sans-serif; text-align: center;">Video URL မတွေ့ရှိပါ။ URL parameter တွင် ?videoUrl= ထည့်သွင်းပေးပါ။</h3>';
+            document.body.innerHTML = '<h3 style="color: #fff; font-family: sans-serif; text-align: center;">Video URL မတွေ့ရှိပါ။</h3>';
         } else {
             let videoUrl = decodeURIComponent(rawVideoUrl).split('|')[0].trim();
             let titleParam = urlParams.get('title') ? decodeURIComponent(urlParams.get('title')) : 'BFA STREAM TV';
 
             document.getElementById('player-logo').innerText = titleParam;
 
-            // Clappr Player Initialize ပြုလုပ်ခြင်း
+            // Clappr Player Config
             const player = new Clappr.Player({
                 source: videoUrl,
                 parentId: "#player",
                 width: '100%',
                 height: '100%',
                 autoPlay: true,
-                mute: true,
+                mute: false, // အသံတန်းထွက်စေရန် false ထားပါသည်
                 playback: {
                     playInline: true,
                     recycleVideo: true
                 }
             });
 
-            // Player Ready ဖြစ်ပါက Video Element Background ကို Transparent ပြောင်းပြီး Auto Unmute ပြုလုပ်ခြင်း
             player.on(Clappr.Events.PLAYER_READY, function() {
                 const videoElement = player.core.activeContainer.el.querySelector('video');
                 if (videoElement) {
                     videoElement.setAttribute('playsinline', 'true');
                     videoElement.setAttribute('webkit-playsinline', 'true');
                     videoElement.style.backgroundColor = 'transparent';
+                    videoElement.muted = false; // Video tag ၏ muted ကိုပါ false လုပ်ခြင်း
                 }
 
-                player.play();
-                setTimeout(() => { 
-                    player.unmute(); 
-                }, 500);
+                // Autoplay ပွင့်အောင် တိုက်ရိုက် ခေါ်ယူခြင်း
+                try {
+                    player.setVolume(100);
+                    player.unmute();
+                    player.play();
+                } catch (e) {
+                    console.log("Autoplay error:", e);
+                }
             });
 
-            // Android TV Remote Control Key Bindings (D-Pad)
+            // Browser/WebView Autoplay Policy ကြောင့် အသံပိတ်သွားပါက Remote ခလုတ် ၁ ချက်နှိပ်လိုက်သည်နှင့် အသံတန်းပွင့်စေရန်
+            const unlockAudio = () => {
+                if (player) {
+                    player.unmute();
+                    player.setVolume(100);
+                    const videoElement = player.core.activeContainer.el.querySelector('video');
+                    if (videoElement) videoElement.muted = false;
+                }
+                document.removeEventListener('keydown', unlockAudio);
+            };
+            document.addEventListener('keydown', unlockAudio);
+
+            // Remote Controller Key Mapping
             document.addEventListener('keydown', (e) => {
                 switch (e.keyCode) {
-                    case 13: // OK / Center Button
-                    case 32: // Spacebar
+                    case 13:
+                    case 32:
                         if (player.isPlaying()) {
                             player.pause();
                         } else {
                             player.play();
                         }
                         break;
-                    case 37: // Left Arrow (Rewind 10s)
+                    case 37:
                         player.seek(Math.max(0, player.getCurrentTime() - 10));
                         break;
-                    case 39: // Right Arrow (Fast Forward 10s)
+                    case 39:
                         player.seek(Math.min(player.getDuration(), player.getCurrentTime() + 10));
                         break;
-                    case 38: // Up Arrow (Volume Up 10%)
+                    case 38:
                         player.setVolume(Math.min(100, player.getVolume() + 10));
                         break;
-                    case 40: // Down Arrow (Volume Down 10%)
+                    case 40:
                         player.setVolume(Math.max(0, player.getVolume() - 10));
                         break;
                 }
