@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Referer Block ကျော်ရန် -->
     <meta name="referrer" content="no-referrer">
-    <title>Shaka Player for Android TV</title>
+    <title>Clappr Player for Android TV</title>
 
     <style>
         html, body {
@@ -27,44 +27,25 @@
             background: #000;
         }
 
-        /* TV Box WebView Black Screen Fix - Transparent Background */
-        video,
-        #video-element {
+        /* TV Box WebView Black Screen Fix - Background Transparent သတ်မှတ်ခြင်း */
+        #player,
+        [data-player],
+        .container[data-container],
+        video {
             width: 100vw !important;
             height: 100vh !important;
-            position: relative;
-            outline: none;
             background: transparent !important;
             background-color: transparent !important;
             object-fit: contain !important;
         }
 
-        /* ညာဘက်အပေါ်ဒေါင့် Logo Overlay */
-        .player-logo {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            z-index: 10;
-            color: #ffffff;
-            font-family: sans-serif;
-            font-size: 14px;
-            font-weight: bold;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 6px 12px;
-            border-radius: 4px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-            letter-spacing: 0.5px;
-            pointer-events: none;
-        }
-
-        /* Marquee Box Overlay */
+        /* Marquee Box Overlay (အပေါ်ဆုံးသို့ ပြောင်းထားသည်) */
         .marquee-box {
             position: absolute;
-            bottom: 0px;
+            top: 0px;
             left: 0;
             width: 100%;
-            z-index: 10;
+            z-index: 20;
             overflow: hidden;
             background: rgba(0, 0, 0, 0.65);
             padding: 4px 0;
@@ -86,133 +67,108 @@
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
         }
+
+        /* ညာဘက်အပေါ်ဒေါင့် Logo Overlay (Marquee Box အောက်သို့ အနည်းငယ် ရွှေ့ပေးထားသည်) */
+        .player-logo {
+            position: absolute;
+            top: 35px;
+            right: 15px;
+            z-index: 20;
+            color: #ffffff;
+            font-family: sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            letter-spacing: 0.5px;
+            pointer-events: none;
+        }
     </style>
 
-    <!-- Google Shaka Player Compiled JS -->
-    <script src="https://cdn.jsdelivr.net/npm/shaka-player@4.7.11/dist/shaka-player.compiled.js"></script>
+    <!-- Clappr Core Library -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.min.js"></script>
 </head>
 <body>
 
     <div class="player-container">
-        <!-- Overlay Layers -->
-        <div id="player-logo" class="player-logo">BFA STREAM TV</div>
-        
+        <!-- Marquee Box Overlay (အပေါ်ဘက်) -->
         <div class="marquee-box">
             <div class="marquee-text">Burmar Future Ai Stream</div>
         </div>
 
-        <!-- Video Element -->
-        <video 
-            id="video-element" 
-            controls 
-            autoplay 
-            muted 
-            playsinline 
-            webkit-playsinline 
-            tabindex="0">
-        </video>
+        <!-- ညာဘက်အပေါ်ဒေါင့် Logo Overlay -->
+        <div id="player-logo" class="player-logo">BFA STREAM TV</div>
+
+        <!-- Clappr Player Container -->
+        <div id="player"></div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', initApp);
+        const urlParams = new URLSearchParams(window.location.search);
+        let rawVideoUrl = urlParams.get('videoUrl');
 
-        function initApp() {
-            // Shaka polyfills တပ်ဆင်ခြင်း
-            shaka.polyfill.installAll();
-
-            if (!shaka.Player.isBrowserSupported()) {
-                document.body.innerHTML = '<h3 style="color: #fff; font-family: sans-serif; text-align: center;">သင့် Device/Browser သည် Shaka Player ကို မထောက်ပံ့ပါ။</h3>';
-                return;
-            }
-
-            initPlayer();
-        }
-
-        async function initPlayer() {
-            const urlParams = new URLSearchParams(window.location.search);
-            let rawVideoUrl = urlParams.get('videoUrl');
-
-            if (!rawVideoUrl) {
-                document.body.innerHTML = '<h3 style="color: #fff; font-family: sans-serif; text-align: center;">Video URL မတွေ့ရှိပါ။ URL parameter တွင် ?videoUrl= ထည့်သွင်းပေးပါ။</h3>';
-                return;
-            }
-
-            // URL Decode ပြုလုပ်ခြင်း နှင့် Pipe (|Referer) ဖျောက်ခြင်း
+        if (!rawVideoUrl) {
+            document.body.innerHTML = '<h3 style="color: #fff; font-family: sans-serif; text-align: center;">Video URL မတွေ့ရှိပါ။ URL parameter တွင် ?videoUrl= ထည့်သွင်းပေးပါ။</h3>';
+        } else {
             let videoUrl = decodeURIComponent(rawVideoUrl).split('|')[0].trim();
             let titleParam = urlParams.get('title') ? decodeURIComponent(urlParams.get('title')) : 'BFA STREAM TV';
 
             document.getElementById('player-logo').innerText = titleParam;
 
-            const video = document.getElementById('video-element');
-            const player = new shaka.Player(video);
-
-            // Low-spec TV Box RAM အစားသက်သာစေရန် Buffer Configuration ချိန်ညှိခြင်း
-            player.configure({
-                streaming: {
-                    bufferingGoal: 15,
-                    rebufferingGoal: 2,
-                    bufferBehind: 10,
-                    ignoreTextStreamFailures: true
-                },
-                manifest: {
-                    retryParameters: {
-                        maxAttempts: 5,
-                        baseDelay: 1000,
-                        backoffFactor: 2
-                    }
+            // Clappr Player Initialize ပြုလုပ်ခြင်း
+            const player = new Clappr.Player({
+                source: videoUrl,
+                parentId: "#player",
+                width: '100%',
+                height: '100%',
+                autoPlay: true,
+                mute: true,
+                playback: {
+                    playInline: true,
+                    recycleVideo: true
                 }
             });
 
-            // Stream Type (MIME Type) ခွဲခြားခြင်း
-            let mimeType = null;
-            const cleanCheckUrl = videoUrl.split('?')[0].toLowerCase();
+            // Player Ready ဖြစ်ပါက Video Element Background ကို Transparent ပြောင်းပြီး Auto Unmute ပြုလုပ်ခြင်း
+            player.on(Clappr.Events.PLAYER_READY, function() {
+                const videoElement = player.core.activeContainer.el.querySelector('video');
+                if (videoElement) {
+                    videoElement.setAttribute('playsinline', 'true');
+                    videoElement.setAttribute('webkit-playsinline', 'true');
+                    videoElement.style.backgroundColor = 'transparent';
+                }
 
-            if (cleanCheckUrl.endsWith('.m3u8') || cleanCheckUrl.includes('.m3u8')) {
-                mimeType = 'application/x-mpegURL';
-            } else if (cleanCheckUrl.endsWith('.mpd') || cleanCheckUrl.includes('.mpd')) {
-                mimeType = 'application/dash+xml';
-            } else if (cleanCheckUrl.endsWith('.mp4') || cleanCheckUrl.includes('.mp4')) {
-                mimeType = 'video/mp4';
-            }
+                player.play();
+                setTimeout(() => { 
+                    player.unmute(); 
+                }, 500);
+            });
 
-            try {
-                // Video Load ပြုလုပ်ခြင်း
-                await player.load(videoUrl, null, mimeType);
-                
-                // WebView Black Screen Bug မဖြစ်စေရန် Video background အကြည်ထားခြင်း
-                video.style.backgroundColor = 'transparent';
-
-                // Autoplay ပွင့်သည်နှင့် 0.5 စက္ကန့်အကြာတွင် Unmute ပြုလုပ်ခြင်း
-                video.play().then(() => {
-                    setTimeout(() => { video.muted = false; }, 500);
-                }).catch(() => {});
-
-            } catch (e) {
-                console.error('Shaka Player Load Error:', e);
-            }
-
-            // Android TV Remote Controller Key Mapping (D-Pad)
+            // Android TV Remote Control Key Bindings (D-Pad)
             document.addEventListener('keydown', (e) => {
                 switch (e.keyCode) {
                     case 13: // OK / Center Button
                     case 32: // Spacebar
-                        if (video.paused) {
-                            video.play();
+                        if (player.isPlaying()) {
+                            player.pause();
                         } else {
-                            video.pause();
+                            player.play();
                         }
                         break;
                     case 37: // Left Arrow (Rewind 10s)
-                        video.currentTime = Math.max(0, video.currentTime - 10);
+                        player.seek(Math.max(0, player.getCurrentTime() - 10));
                         break;
                     case 39: // Right Arrow (Fast Forward 10s)
-                        video.currentTime = Math.min(video.duration || 0, video.currentTime + 10);
+                        player.seek(Math.min(player.getDuration(), player.getCurrentTime() + 10));
                         break;
                     case 38: // Up Arrow (Volume Up 10%)
-                        video.volume = Math.min(1, video.volume + 0.1);
+                        player.setVolume(Math.min(100, player.getVolume() + 10));
                         break;
                     case 40: // Down Arrow (Volume Down 10%)
-                        video.volume = Math.max(0, video.volume - 0.1);
+                        player.setVolume(Math.max(0, player.getVolume() - 10));
                         break;
                 }
             });
